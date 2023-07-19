@@ -1,14 +1,41 @@
+using Application.AutoMapper;
 using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Configuration;
+using MediatR;
+using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.NetworkInformation;
+using System.Reflection;
 
-var host = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-        // Obtenha uma instância do DbContextOptions a partir das configurações
-        var options = new DbContextOptionsBuilder<ExpanseManagementContext>()
-            .UseSqlServer(host.Configuration.GetConnectionString("DefaultConnection"))
-            .Options;
 
-        var app = host.Build();
+builder.Services.AddDbContext<ExpanseManagementContext>(options =>
+    options.UseSqlite(builder.Configuration.GetPathSQLite()));
+
+builder.Services.AddControllers();
+
+builder.Services.AddMvc()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseJsonPolicy();
+    });
+
+
+
+builder.Services.AddDependencyInjectionConfiguration();
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
+
+var app = builder.Build();
+
         // Execute as migrações do banco de dados
         using (var scope = app.Services.CreateScope())
         {
@@ -17,4 +44,15 @@ var host = WebApplication.CreateBuilder(args);
             dbContext.Database.Migrate();
         }
 
-        app.Run();
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
+app.Run();
+
+
+
+

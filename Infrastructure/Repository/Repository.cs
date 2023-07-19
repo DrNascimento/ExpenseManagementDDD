@@ -1,5 +1,4 @@
 ﻿using Domain.Interfaces.Repository;
-using Entities.Entities;
 using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,12 +22,14 @@ namespace Infrastructure.Data.Repository
 
         public void Add(TEntity entity)
         {
-            throw new NotImplementedException();
+            SetCreatedField(entity, DateTime.UtcNow);
+            DbSet.Add(entity);
         }
 
         public void Delete(TEntity entity)
         {
-            throw new NotImplementedException();
+            SetIsDeleteField(entity, true);
+            Update(entity);
         }
 
         public void HardDelete(TEntity entity)
@@ -38,12 +39,38 @@ namespace Infrastructure.Data.Repository
 
         public int SaveChanges()
         {
-            throw new NotImplementedException();
+            return Db.SaveChanges();
         }
 
         public void Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            SetUpdatedField(entity, DateTime.UtcNow);
+            Db.Update(entity);
+        }
+
+        public virtual async Task<TEntity> GetById(int iid)
+        {
+            return await DbSet.FindAsync(iid);
+        }
+
+        public virtual IQueryable<TEntity> GetAll()
+        {
+            return DbSet.AsNoTracking();
+        }
+
+        private void SetCreatedField(TEntity entity, DateTime createdAt)
+        {
+            entity.GetType().GetProperty("Created")?.SetValue(entity, createdAt);
+        }
+
+        private void SetIsDeleteField(TEntity entity, bool isDelete)
+        {
+            entity.GetType().GetProperty("IsDeleted")?.SetValue(entity, isDelete);
+        }
+
+        private void SetUpdatedField(TEntity entity, DateTime updatedAt)
+        {
+            entity.GetType().GetProperty("Created")?.SetValue(entity, updatedAt);
         }
     }
   }

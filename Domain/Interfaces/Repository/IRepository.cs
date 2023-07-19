@@ -17,5 +17,9 @@ namespace Domain.Interfaces.Repository
         void HardDelete(TEntity entity);
 
         int SaveChanges();
+
+        Task<TEntity> GetById(int id);
+
+        IQueryable<TEntity> GetAll();
     }
 }

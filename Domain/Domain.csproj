@@ -7,14 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Entities\Entities.csproj" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CommandHandler\" />
-    <Folder Include="Command\" />
-    <Folder Include="Events\" />
-    <Folder Include="Models\" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 
 </Project>
