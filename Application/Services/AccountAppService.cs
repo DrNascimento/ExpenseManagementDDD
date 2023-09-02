@@ -51,11 +51,11 @@ namespace Application.Services
             return _tokenAppService.GenerateToken(user);         
         }
 
-        public async Task<int> Create(NewAccountViewModel newAccountViewModel)
+        public async Task<int> Create(CreateNewAccountViewModel newAccountViewModel)
         {
             newAccountViewModel = OnBeforeRegister(newAccountViewModel);
 
-            VerifyRegister(newAccountViewModel);
+            //VerifyRegister(newAccountViewModel);
 
             var command = _mapper.Map<CreateUserCommand>(newAccountViewModel);
 
@@ -77,16 +77,17 @@ namespace Application.Services
                 throw new Exception("Email or password is invalid");
         }
 
-        private NewAccountViewModel OnBeforeRegister(NewAccountViewModel newAccountViewModel)
+        private CreateNewAccountViewModel OnBeforeRegister(CreateNewAccountViewModel newAccountViewModel)
         {
             newAccountViewModel.Email = newAccountViewModel.Email.Trim();
             newAccountViewModel.Name = newAccountViewModel.Name.Trim();
             newAccountViewModel.Password = Crypt.StringToSha256(newAccountViewModel.Password);
+            newAccountViewModel.ConfirmPassword = Crypt.StringToSha256(newAccountViewModel.ConfirmPassword);
 
             return newAccountViewModel;
         }
 
-        private void VerifyRegister(NewAccountViewModel newAccountViewModel)
+        private void VerifyRegister(CreateNewAccountViewModel newAccountViewModel)
         { 
             if (!_userRepository.IsEmailAvailable(newAccountViewModel.Email))
                 throw new Exception("Email is not available");

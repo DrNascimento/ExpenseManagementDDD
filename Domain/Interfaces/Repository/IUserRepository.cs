@@ -12,5 +12,7 @@ namespace Domain.Interfaces.Repository
         bool IsEmailAvailable(string email);
 
         Task<User> GetByEmailAndPassword(string email, string password);
+
+        bool HasUserById(int id);
     }
 }

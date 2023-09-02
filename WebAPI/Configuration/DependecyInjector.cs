@@ -4,6 +4,9 @@ using Domain.CommandHandlers.UserCommandHandlers;
 using Domain.Commands.UserCommands;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
+using Domain.Validations;
+using Domain.Validations.UserCommandValidations;
+using FluentValidation;
 using Infrastructure.Data.Repository;
 using Infrastructure.Data.Repository.UnitOfWork;
 using MediatR;
@@ -11,6 +14,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace WebAPI.Configuration
 {
@@ -39,6 +43,7 @@ namespace WebAPI.Configuration
             #region Account
             // AppService
             services.AddScoped<IAccountAppService, AccountAppService>();
+            services.AddScoped<ITokenAppService, TokenAppService>();
             #endregion
 
             #region UnitOfWork
@@ -63,9 +68,16 @@ namespace WebAPI.Configuration
 
             // Repository
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
             #endregion
 
             #endregion
+        }
+
+        public static void RegisterBehaviors(this Microsoft.Extensions.DependencyInjection.MediatRServiceConfiguration configuration)
+        {
+            configuration.AddBehavior<IPipelineBehavior<CreateUserCommand, int>, ValidationBehavior<CreateUserCommand, int>>();
         }
 
     }

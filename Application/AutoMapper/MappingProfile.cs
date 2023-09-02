@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.ViewModel;
 using Application.ViewModel.Account;
 using AutoMapper;
 using Domain.Entities;
@@ -15,6 +16,8 @@ namespace Application.AutoMapper
         public MappingProfile() 
         {
             CreateMap<User, LoginResponseViewModel>();
+
+            CreateMap<User, UserViewModel>();
         }
     }
 }

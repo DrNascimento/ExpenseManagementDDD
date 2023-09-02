@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using Domain.Validations;
+using Domain.Commands.UserCommands;
+using Infrastructure.Web;
+using MediatR.Pipeline;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,22 +32,22 @@ builder.Services.AddMvc()
 
 builder.Services.AddDependencyInjectionConfiguration();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddMediatR(cfg => 
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()).RegisterBehaviors());
 
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-
-
 var app = builder.Build();
 
-        // Execute as migrações do banco de dados
-        using (var scope = app.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-            var dbContext = services.GetRequiredService<ExpanseManagementContext>();
-            dbContext.Database.Migrate();
-        }
+app.UseMiddleware<ExpanseManagementMiddleware>();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseExceptionHandler("/error");
+    app.UseHsts();
+}
 
 app.UseRouting();
 

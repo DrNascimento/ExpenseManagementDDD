@@ -22,11 +22,17 @@ namespace WebAPI.Controller
         public async Task<ActionResult> GetByIdAsync(int id)
         {
 
-            //var all = await _userAppService.Register();
             var registeredUser = await _userAppService.GetById(id);
             
 
             return Ok(registeredUser);
+        }
+
+        public async Task<ActionResult> GetAll ()
+        {
+            var users = await _userAppService.GetAll();
+
+            return Ok(users);
         }
     }
 }

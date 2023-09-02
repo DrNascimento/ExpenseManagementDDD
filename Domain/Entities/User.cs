@@ -14,6 +14,7 @@ namespace Domain.Entities
         [Required]
         public string Name { get; set; }
 
+        [MaxLength(64)]
         [Required]
         public string Password { get; set; }
 

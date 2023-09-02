@@ -1,9 +1,12 @@
 ﻿using Domain.CommandHandler;
 using Domain.Commands.UserCommands;
 using Domain.Entities;
+using Domain.Interfaces.CommandValidations;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using Domain.Notifications.UserNotifications;
+using Domain.Validations.UserCommandValidations;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -40,7 +43,7 @@ namespace Domain.CommandHandlers.UserCommandHandlers
 
             await _uow.CommitAsync();
 
-            await _mediator.Publish(new CreatedUserNotification { Id = user.Id, Email = user.Email, Name = user.Name, Password = user.Password });
+            await _mediator.Publish(new CreatedUserNotification { Id = user.Id, Email = user.Email, Name = user.Name, Password = user.Password }, cancellationToken);
 
             return user.Id;
         }

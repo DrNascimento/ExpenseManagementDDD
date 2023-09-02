@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Core", "Domain.Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.SQLiteDatabase", "Infrastructure.SQLiteDatabase\Infrastructure.SQLiteDatabase.csproj", "{668EA975-4947-4E32-8276-14F5472D9731}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Identity", "Infrastructure.Identity\Infrastructure.Identity.csproj", "{1239B1B9-ADD0-4184-8FE2-821B3E3D6147}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Identity", "Infrastructure.Identity\Infrastructure.Identity.csproj", "{1239B1B9-ADD0-4184-8FE2-821B3E3D6147}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Web", "Infrastructure.Web\Infrastructure.Web.csproj", "{22B575A3-2BEC-4150-9E80-728B4A600238}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{1239B1B9-ADD0-4184-8FE2-821B3E3D6147}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1239B1B9-ADD0-4184-8FE2-821B3E3D6147}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1239B1B9-ADD0-4184-8FE2-821B3E3D6147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22B575A3-2BEC-4150-9E80-728B4A600238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22B575A3-2BEC-4150-9E80-728B4A600238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22B575A3-2BEC-4150-9E80-728B4A600238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22B575A3-2BEC-4150-9E80-728B4A600238}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{24F87B05-13DA-45CA-BCBE-DA51A808E5AC} = {92A5D13C-CF08-441B-A2B2-E5DF5821F2E7}
 		{668EA975-4947-4E32-8276-14F5472D9731} = {6B06A375-18A1-43F8-A162-46280571E395}
 		{1239B1B9-ADD0-4184-8FE2-821B3E3D6147} = {6B06A375-18A1-43F8-A162-46280571E395}
+		{22B575A3-2BEC-4150-9E80-728B4A600238} = {6B06A375-18A1-43F8-A162-46280571E395}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {95149B15-0020-4ABF-AA8E-32AB1ACA9166}

@@ -9,7 +9,7 @@ namespace Application.Interfaces
 {
     public interface IAccountAppService
     {
-        Task<int> Create(NewAccountViewModel newAccount);
+        Task<int> Create(CreateNewAccountViewModel newAccount);
 
         Task<string> LogIn(LoginViewModel login);
     }

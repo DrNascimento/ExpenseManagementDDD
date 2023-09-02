@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Commands.UserCommands
 {
-    public class UserCommand
+    public class UserCommand 
     {
         public int Id { get; set; }
 
@@ -17,6 +17,6 @@ namespace Domain.Commands.UserCommands
         public string Password { get; set; }
 
         public string Email { get; set; }
-
+        
     }
 }

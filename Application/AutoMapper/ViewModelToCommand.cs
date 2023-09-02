@@ -13,8 +13,8 @@ namespace Application.AutoMapper
     {
         public ViewModelToCommand() 
         {
-            CreateMap<NewAccountViewModel, CreateUserCommand>().
-                ConstructUsing(c => new CreateUserCommand(c.Name, c.Password, c.Email));
+            CreateMap<CreateNewAccountViewModel, CreateUserCommand>().
+                ConstructUsing(c => new CreateUserCommand(c.Name, c.Email, c.Password, c.ConfirmPassword, c.PasswordLength));
         }
     }
 }

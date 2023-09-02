@@ -33,5 +33,10 @@ namespace Infrastructure.Data.Repository
         {
             return !DbSet.Any(u => u.Email == email && !u.IsDeleted);
         }
+
+        public bool HasUserById(int id)
+        {
+            return DbSet.Any(u => u.Id == id);
+        }
     }
 }

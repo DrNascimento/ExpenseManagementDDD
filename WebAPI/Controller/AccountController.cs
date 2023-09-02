@@ -21,7 +21,7 @@ namespace WebAPI.Controller
 
 
         [HttpPost("sign-up")]
-        public async Task<ActionResult> PostAsync([FromBody] NewAccountViewModel newAccount)
+        public async Task<ActionResult> PostAsync([FromBody] CreateNewAccountViewModel newAccount)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -41,7 +41,7 @@ namespace WebAPI.Controller
             var id = await _accountAppService.LogIn(loginViewModel);
 
 
-            return Ok();
+            return Ok(new { id });
         }
     }
 }
