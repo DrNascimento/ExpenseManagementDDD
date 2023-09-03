@@ -15,4 +15,8 @@
     <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.Identity\Infrastructure.Identity.csproj" />
+  </ItemGroup>
+
 </Project>

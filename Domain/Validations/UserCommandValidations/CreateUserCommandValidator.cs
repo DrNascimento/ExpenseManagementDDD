@@ -7,13 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Domain.Validations.UserCommandValidations
 {
     public class CreateUserCommandValidator : UserCommandValidations<CreateUserCommand>
-            
-    {
+
+    { 
         public CreateUserCommandValidator(IUserRepository userRepository)
             : base(userRepository)
         {
@@ -21,18 +22,6 @@ namespace Domain.Validations.UserCommandValidations
             ValidateEmail();
             ValidateEmailAvailability();
             ValidatePassword();
-
-            // Unique
-            ValidateConfirmPassword();
-            ValidatePasswordLength();
         }
-
-        private void ValidateConfirmPassword() => 
-            RuleFor(u => u.ConfirmPassword)
-                .Equal(u1 => u1.Password);
-
-        public void ValidatePasswordLength() =>
-            RuleFor(x => x.PasswordLength)
-                .LessThanOrEqualTo(64);
     }
 }

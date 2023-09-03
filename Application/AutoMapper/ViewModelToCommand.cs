@@ -14,7 +14,7 @@ namespace Application.AutoMapper
         public ViewModelToCommand() 
         {
             CreateMap<CreateNewAccountViewModel, CreateUserCommand>().
-                ConstructUsing(c => new CreateUserCommand(c.Name, c.Email, c.Password, c.ConfirmPassword, c.PasswordLength));
+                ConstructUsing(c => new CreateUserCommand(c.Name, c.Email, c.Password));
         }
     }
 }

@@ -8,9 +8,9 @@ namespace Infrastructure.Identity
 {
     public class JwtSettings
     {
-        public string SecretKey { get; set; } = "SecretKey";
-        public string Issuer { get; set; } = "Issuer";
-        public string Audience { get; set; } = "Audience";
-        public int ExpirationInMinutes { get; set; } = 120;
+        public string SecretKey { get; set; }
+        public string Issuer { get; set; }
+        public string Audience { get; set; }
+        public int ExpirationInMinutes { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Domain.Validations.UserCommandValidations
@@ -15,6 +16,8 @@ namespace Domain.Validations.UserCommandValidations
         where T : UserCommand
     {
         private readonly IUserRepository _userRepository;
+
+        private string CurrentMessage { get; set; }
 
         public UserCommandValidations(IUserRepository userRepository) 
         {
@@ -43,13 +46,48 @@ namespace Domain.Validations.UserCommandValidations
 
         public void ValidatePassword() =>
             RuleFor(x => x.Password)
-                .NotEmpty();
+                .Must(IsStrongPassword)
+                    .WithMessage((_) => CurrentMessage);
 
         public void ValidateExisting() =>
             RuleFor(x => x.Id)
                 .NotEmpty()
                 .Must(_userRepository.HasUserById)
                 .WithMessage("User does not exist");
-            
+
+        private bool IsStrongPassword(string password)
+        {
+            var validationErrors = new List<string>();
+
+            if (password is null)
+            {
+                CurrentMessage = "The password must have at least 8 characters.";
+                return false;
+            }
+
+            if (password.Length < 8)
+                validationErrors.Add("The password must have at least 8 characters.");
+
+            if (!Regex.IsMatch(password, @"[A-Z]"))
+                validationErrors.Add("The password must contain at least one uppercase letter.");
+
+            if (!Regex.IsMatch(password, @"[a-z]"))
+                validationErrors.Add("The password must contain at least one lowercase letter.");
+
+            if (!Regex.IsMatch(password, @"[0-9]"))
+                validationErrors.Add("The password must contain at least one digit.");
+
+            if (!Regex.IsMatch(password, @"[@#$%^&+=]"))
+                validationErrors.Add("The password must contain at least one special character.");
+
+            if (validationErrors.Count > 0)
+            {
+                CurrentMessage = string.Join(" ", validationErrors);
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

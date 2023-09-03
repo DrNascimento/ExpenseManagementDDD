@@ -16,6 +16,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -42,55 +43,82 @@ namespace Application.Services
 
         public async Task<string> LogIn(LoginViewModel loginViewModel) 
         {
-            loginViewModel = OnBeforeLogin(loginViewModel);
+            ValidateBeforeLogIn(loginViewModel);
+            loginViewModel = OnBeforeLoginApply(loginViewModel);
 
-            var user = await _userRepository.GetByEmailAndPassword(loginViewModel.Email, loginViewModel.Password);
+            var user = await _userRepository.GetByEmail(loginViewModel.Email);
 
-            VerifyLogin(user);
+            ValidateAfterLogin(user, loginViewModel.Password);
 
             return _tokenAppService.GenerateToken(user);         
         }
 
-        public async Task<int> Create(CreateNewAccountViewModel newAccountViewModel)
+        public async Task<int> Create(CreateNewAccountViewModel createNewAccountViewModel)
         {
-            newAccountViewModel = OnBeforeRegister(newAccountViewModel);
+            ValidateBeforeCreate(createNewAccountViewModel);
+            createNewAccountViewModel = ApplyBeforeCreate(createNewAccountViewModel);
 
-            //VerifyRegister(newAccountViewModel);
-
-            var command = _mapper.Map<CreateUserCommand>(newAccountViewModel);
+            var command = _mapper.Map<CreateUserCommand>(createNewAccountViewModel);
 
             return await _mediator.Send(command);
         }
 
 
-        private LoginViewModel OnBeforeLogin(LoginViewModel loginViewModel)
+
+        #region Validations
+        private void ValidateBeforeLogIn(LoginViewModel loginViewModel)
+        {
+            if (loginViewModel == null) 
+                throw 
+                    new ArgumentNullException(nameof(loginViewModel));
+
+            if (string.IsNullOrWhiteSpace(loginViewModel.Email))
+                throw new 
+                    ApplicationException($"{nameof(loginViewModel.Email)} cannot be empty");
+
+            if (string.IsNullOrEmpty(loginViewModel.Password))
+                throw new
+                    ApplicationException($"{nameof(loginViewModel.Password)} cannot be empty");
+        }
+
+
+
+        private LoginViewModel OnBeforeLoginApply(LoginViewModel loginViewModel)
         {
             loginViewModel.Email = loginViewModel.Email.Trim();
-            loginViewModel.Password = Crypt.StringToSha256(loginViewModel.Password);
+            loginViewModel.Password = loginViewModel.Password;
 
             return loginViewModel;
         }
 
-        private void VerifyLogin (User user)
+        private void ValidateAfterLogin (User user, string unhashedPassword)
         {
             if (user is null)
-                throw new Exception("Email or password is invalid");
-        }
+                throw 
+                    new ApplicationException("Email or password is invalid");
 
-        private CreateNewAccountViewModel OnBeforeRegister(CreateNewAccountViewModel newAccountViewModel)
+            if (new BCryptHash().VerifyPassword(unhashedPassword, user.Password) == false)
+                throw
+                    new ApplicationException("Email or password is invalid");
+
+        }
+        #endregion
+
+        private void ValidateBeforeCreate(CreateNewAccountViewModel createNewAccount)
         {
-            newAccountViewModel.Email = newAccountViewModel.Email.Trim();
-            newAccountViewModel.Name = newAccountViewModel.Name.Trim();
-            newAccountViewModel.Password = Crypt.StringToSha256(newAccountViewModel.Password);
-            newAccountViewModel.ConfirmPassword = Crypt.StringToSha256(newAccountViewModel.ConfirmPassword);
+            if (createNewAccount == null)
+                throw new ApplicationException("Email and password is required");
 
-            return newAccountViewModel;
+            if (createNewAccount.ConfirmPassword != createNewAccount.Password)
+                throw new ApplicationException("The passwords does not match");
         }
 
-        private void VerifyRegister(CreateNewAccountViewModel newAccountViewModel)
-        { 
-            if (!_userRepository.IsEmailAvailable(newAccountViewModel.Email))
-                throw new Exception("Email is not available");
+        private CreateNewAccountViewModel ApplyBeforeCreate(CreateNewAccountViewModel createNewAccount)
+        {
+            createNewAccount.Email = createNewAccount.Email.Trim();
+            createNewAccount.Name = createNewAccount.Name.Trim();
+
+            return createNewAccount;
         }
     }
 }

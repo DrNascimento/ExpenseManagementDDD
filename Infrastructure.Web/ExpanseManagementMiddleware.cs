@@ -33,24 +33,28 @@ namespace Infrastructure.Web
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = "application/json";
 
-                if (ex is ValidationException)
+                var jsonResult = string.Empty;
+                var result = new ValidationFailureResponse();
+
+                switch (ex)
                 {
+                    case ValidationException:
+                        result.Errors = (ex as ValidationException)
+                            .Errors
+                            .Select(e => new ValidationFailure
+                            {
+                                ErrorMessage = e.ErrorMessage
+                            });
+                    break;
+                    case Exception:
 
-                    var result = new ValidationFailureResponse();
-                    result.Errors = (ex as ValidationException)
-                        .Errors
-                        .Select(e => new ValidationFailure
-                        {
-                            PropertyName = e.PropertyName,
-                            ErrorMessage = e.ErrorMessage
-                        });
-                    
-                    
+                        var vf = new ValidationFailure { ErrorMessage = ex.Message };
+                        result.Errors = new List<ValidationFailure> { vf };
 
-                    await context.Response.WriteAsync(JsonSerializer.Serialize(result));
+                    break;
                 }
 
-
+                await context.Response.WriteAsync(JsonSerializer.Serialize(result));
             }
         }
     }

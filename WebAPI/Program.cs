@@ -19,6 +19,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ExpanseManagementContext>(options =>
     options.UseSqlite(builder.Configuration.GetPathSQLite()));
+builder.Configuration
+    .SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("appsettings.json", true, true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+    .AddEnvironmentVariables();
 
 builder.Services.AddControllers();
 
@@ -38,6 +43,8 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+builder.Services.AddIdentitySetup(builder.Configuration);
+
 var app = builder.Build();
 
 app.UseMiddleware<ExpanseManagementMiddleware>();
@@ -50,11 +57,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+
+
+
 
 app.Run();
 

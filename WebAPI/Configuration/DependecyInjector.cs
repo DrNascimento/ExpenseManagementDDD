@@ -31,9 +31,9 @@ namespace WebAPI.Configuration
 
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+            services.AddScoped<IUserContext, UserContext>();
 
-            DependecyInjector.RegisterServices(services);
+            RegisterServices(services);
         }
 
         private static void RegisterServices(IServiceCollection services)

@@ -7,7 +7,7 @@
             string directoryName = configuration is null ? null : configuration.GetConnectionString("DefaultConnection");
 
             if (string.IsNullOrWhiteSpace(directoryName))
-                throw new Exception("Database path is not defined.");
+                throw new ApplicationException("Database path is not defined.");
 
             string path = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", directoryName));
 

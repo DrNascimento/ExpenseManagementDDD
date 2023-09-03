@@ -1,18 +1,11 @@
 ﻿using Domain.CommandHandler;
 using Domain.Commands.UserCommands;
 using Domain.Entities;
-using Domain.Interfaces.CommandValidations;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using Domain.Notifications.UserNotifications;
-using Domain.Validations.UserCommandValidations;
-using FluentValidation;
+using Infrastructure.Identity;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.CommandHandlers.UserCommandHandlers
 {
@@ -36,7 +29,7 @@ namespace Domain.CommandHandlers.UserCommandHandlers
             {
                 Name = command.Name,
                 Email = command.Email,
-                Password = command.Password
+                Password = new BCryptHash().HashPassword(command.Password)
             };
 
             _userRepository.Add(user);

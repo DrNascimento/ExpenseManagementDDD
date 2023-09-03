@@ -26,8 +26,16 @@ namespace Infrastructure.Data.Repository
 
         public async Task<User> GetByEmailAndPassword (string email, string password)
         {
-            return await DbSet.FirstOrDefaultAsync(u => u.Email == email && u.Password == password && !u.IsDeleted);
+            return await DbSet
+                .FirstOrDefaultAsync(u => u.Email == email && u.Password == password && !u.IsDeleted);
         }
+
+        public async Task<User> GetByEmail(string email)
+        {
+            return await DbSet
+                .FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);
+        }
+
 
         public bool IsEmailAvailable(string email)
         {

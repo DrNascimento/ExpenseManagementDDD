@@ -12,16 +12,11 @@ namespace Domain.Commands.UserCommands
 {
     public class CreateUserCommand : UserCommand, IRequest<int>
     {
-        public CreateUserCommand(string name, string email, string password, string confirmPassword, int passwordLength)
+        public CreateUserCommand(string name, string email, string password)
         {
             Name = name;
             Password = password;
             Email = email;
-            ConfirmPassword = confirmPassword;
-            PasswordLength = passwordLength;
         }
-
-        public string ConfirmPassword { get; set; }
-        public int PasswordLength { get; set; }
     }
 }

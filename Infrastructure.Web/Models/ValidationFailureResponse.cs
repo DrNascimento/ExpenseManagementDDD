@@ -20,9 +20,6 @@ namespace Infrastructure.Web.Models
     public class ValidationFailure
     {
 
-        [JsonPropertyName("property")]
-        public string PropertyName { get; set; }
-
         [JsonPropertyName("message")]
         public string ErrorMessage { get; set; }
     }
