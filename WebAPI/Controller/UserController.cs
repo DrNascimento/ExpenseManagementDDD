@@ -1,6 +1,4 @@
 ﻿using Application.Interfaces;
-using Application.Services;
-using Application.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Helper;
@@ -22,23 +20,29 @@ namespace WebAPI.Controller
             _userContext = userContext;
         }
 
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetByIdAsync(int id)
+        [Authorize(Roles = "admin")]
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> GetById(int id)
         {
-
             var registeredUser = await _userAppService.GetById(id);
-            
 
             return Ok(registeredUser);
         }
 
-        public async Task<ActionResult> GetAll ()
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public ActionResult GetAll ()
         {
-            var id  = _userContext.GetUserId();
-            var users = await _userAppService.GetAll();
+            var users = _userAppService.GetAll();
 
             return Ok(users);
+        }
+
+        [HttpGet("profile")]
+        public async Task<ActionResult> GetProfile()
+        {
+            var currentUser = Convert.ToInt16(_userContext.UserId);
+            return Ok(await _userAppService.GetById(currentUser));
         }
     }
 }

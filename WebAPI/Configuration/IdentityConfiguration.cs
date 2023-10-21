@@ -1,12 +1,12 @@
 ﻿using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 namespace WebAPI.Configuration
 {
-    public static class IdentitySetup
+    public static class IdentityConfiguration
     {
         /// <summary>
         /// 
@@ -16,7 +16,7 @@ namespace WebAPI.Configuration
         /// <exception cref="ArgumentNullException"></exception>
         public static void AddIdentitySetup(this IServiceCollection services, IConfiguration configuration)
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+            ArgumentNullException.ThrowIfNull(services, nameof(services));
 
             // JWT Setup
             var appSettingsSection = configuration.GetSection("JwtSettings");
@@ -24,30 +24,32 @@ namespace WebAPI.Configuration
 
             var jwtSettings = appSettingsSection.Get<JwtSettings>();
             
-            var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey));
 
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = true;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = key,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
                     ValidateLifetime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                    ValidateIssuerSigningKey = true,
+                    RoleClaimType = ClaimTypes.Role
                 };
             });
 
             services.AddAuthorization(options =>
             {
-                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
-                defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
-                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+                options.AddPolicy("Admin", p =>
+                {
+                    p.RequireClaim(ClaimTypes.Role, "admin");
+                });
             });
         }
     }

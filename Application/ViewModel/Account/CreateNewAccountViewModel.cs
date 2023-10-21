@@ -1,10 +1,4 @@
-﻿using AutoMapper.Configuration.Conventions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace Application.ViewModel.Account
 {
@@ -21,6 +15,9 @@ namespace Application.ViewModel.Account
 
         [JsonPropertyName("email")]
         public string Email { get; set; }
+
+        [JsonPropertyName("type_user")]
+        public int UserTypeEnum { get; set; }
 
     }
 }

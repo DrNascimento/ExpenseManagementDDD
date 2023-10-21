@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-
+using Entities.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
@@ -21,5 +22,9 @@ namespace Domain.Entities
         [MaxLength(100)]
         [Required]
         public string Email { get; set; }
+
+
+        [Column("TypeUser", TypeName ="nvarchar(50)")]
+        public UserTypeEnum UserTypeEnum { get; set; }
     }
 }

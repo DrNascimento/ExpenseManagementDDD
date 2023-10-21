@@ -1,22 +1,16 @@
-﻿using Domain.Interfaces.Repository;
-using Domain.Validations.UserCommandValidations;
-using FluentValidation.Results;
+﻿using Entities.Enums;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Commands.UserCommands
 {
     public class CreateUserCommand : UserCommand, IRequest<int>
     {
-        public CreateUserCommand(string name, string email, string password)
+        public CreateUserCommand(string name, string email, string password, UserTypeEnum userTypeEnum)
         {
             Name = name;
             Password = password;
             Email = email;
+            UserTypeEnum = userTypeEnum;
         }
     }
 }

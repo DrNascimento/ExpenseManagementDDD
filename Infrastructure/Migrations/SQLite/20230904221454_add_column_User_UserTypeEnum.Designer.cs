@@ -3,16 +3,19 @@ using System;
 using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Infrastructure.Data.Migrations.SQLite
+namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ExpanseManagementContext))]
-    partial class ExpanseManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20230904221454_add_column_User_UserTypeEnum")]
+    partial class add_column_User_UserTypeEnum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");

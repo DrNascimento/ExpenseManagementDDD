@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Enums
 {
-    public enum TypeUserEnum
+    public enum UserTypeEnum
     {
         Common = 0,
         Admin = 1

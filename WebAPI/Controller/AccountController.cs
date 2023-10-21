@@ -10,22 +10,19 @@ namespace WebAPI.Controller
     [Route("api/account")]
     public class AccountController : ApiController
     {
-        private readonly IUserAppService _userAppService;
         private readonly IAccountAppService _accountAppService;
 
-        public AccountController(IUserAppService userAppService, IAccountAppService accountAppService)
+        public AccountController(IAccountAppService accountAppService)
         {
-            _userAppService = userAppService;
             _accountAppService = accountAppService;
         }
-
 
         [HttpPost("sign-up")]
         public async Task<ActionResult> PostAsync([FromBody] CreateNewAccountViewModel newAccount)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+            
             var id = await _accountAppService.Create(newAccount);
 
 

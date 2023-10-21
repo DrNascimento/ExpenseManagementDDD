@@ -1,4 +1,5 @@
 ﻿
+using Entities.Enums;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace Domain.Commands.UserCommands
         public string Password { get; set; }
 
         public string Email { get; set; }
+
+        public UserTypeEnum UserTypeEnum { get; set; }
         
     }
 }

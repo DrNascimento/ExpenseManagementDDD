@@ -65,8 +65,8 @@ namespace Application.Services
 
 
 
-        #region Validations
-        private void ValidateBeforeLogIn(LoginViewModel loginViewModel)
+        #region Validations and Applyers
+        private static void ValidateBeforeLogIn(LoginViewModel loginViewModel)
         {
             if (loginViewModel == null) 
                 throw 
@@ -83,7 +83,7 @@ namespace Application.Services
 
 
 
-        private LoginViewModel OnBeforeLoginApply(LoginViewModel loginViewModel)
+        private static LoginViewModel OnBeforeLoginApply(LoginViewModel loginViewModel)
         {
             loginViewModel.Email = loginViewModel.Email.Trim();
             loginViewModel.Password = loginViewModel.Password;
@@ -91,7 +91,7 @@ namespace Application.Services
             return loginViewModel;
         }
 
-        private void ValidateAfterLogin (User user, string unhashedPassword)
+        private static void ValidateAfterLogin(User user, string unhashedPassword)
         {
             if (user is null)
                 throw 
@@ -102,9 +102,9 @@ namespace Application.Services
                     new ApplicationException("Email or password is invalid");
 
         }
-        #endregion
 
-        private void ValidateBeforeCreate(CreateNewAccountViewModel createNewAccount)
+
+        private static void ValidateBeforeCreate(CreateNewAccountViewModel createNewAccount)
         {
             if (createNewAccount == null)
                 throw new ApplicationException("Email and password is required");
@@ -113,12 +113,14 @@ namespace Application.Services
                 throw new ApplicationException("The passwords does not match");
         }
 
-        private CreateNewAccountViewModel ApplyBeforeCreate(CreateNewAccountViewModel createNewAccount)
+        private static CreateNewAccountViewModel ApplyBeforeCreate(CreateNewAccountViewModel createNewAccount)
         {
             createNewAccount.Email = createNewAccount.Email.Trim();
             createNewAccount.Name = createNewAccount.Name.Trim();
 
             return createNewAccount;
-        }
+        }  
+        
+        #endregion
     }
 }

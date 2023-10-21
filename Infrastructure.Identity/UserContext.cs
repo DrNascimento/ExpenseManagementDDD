@@ -1,30 +1,29 @@
-﻿    using Microsoft.AspNetCore.Http;
-    using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
-    public interface IUserContext
+public interface IUserContext
+{
+    string UserId { get;  }
+    string UserName { get; }
+    string Role { get; }
+}
+
+public class UserContext : IUserContext
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public UserContext(IHttpContextAccessor httpContextAccessor)
     {
-        string GetUserId();
-        string GetUserName();
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    public class UserContext : IUserContext
-    {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+    public string UserId
+        => _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        public UserContext(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+    public string UserName =>
+        _httpContextAccessor.HttpContext?.User.Identity?.Name;
 
-        public string GetUserId()
-        {
-            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return userId;
-        }
+    public string Role =>
+        _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value;
 
-        public string GetUserName()
-        {
-            var userName = _httpContextAccessor.HttpContext?.User.Identity.Name;
-            return userName;
-        }
-    }
+}

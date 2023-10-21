@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -32,6 +33,19 @@ namespace Infrastructure.Data.Context
                 return;
 
             optionsBuilder.UseSqlite(@"Data Source=C:\projetos\ExpenseManagementDDD\ExpenseManagementDDD\Infrastructure.SQLiteDatabase\expanse_management.db");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Enum --> TypeUserEnum
+            modelBuilder.Entity<User>()
+                .Property(u => u.UserTypeEnum)
+                .HasConversion(
+                    v => v.ToString(), 
+                    v => (UserTypeEnum)Enum.Parse(typeof(UserTypeEnum), v) 
+                );
         }
     }
 }

@@ -39,18 +39,16 @@ namespace Infrastructure.Web
                 switch (ex)
                 {
                     case ValidationException:
-                        result.Errors = (ex as ValidationException)
-                            .Errors
+                        result.Errors =
+                            ((ValidationException)ex).Errors
                             .Select(e => new ValidationFailure
                             {
                                 ErrorMessage = e.ErrorMessage
                             });
                     break;
-                    case Exception:
-
+                    default:
                         var vf = new ValidationFailure { ErrorMessage = ex.Message };
                         result.Errors = new List<ValidationFailure> { vf };
-
                     break;
                 }
 

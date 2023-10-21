@@ -29,14 +29,22 @@ namespace Domain.CommandHandlers.UserCommandHandlers
             {
                 Name = command.Name,
                 Email = command.Email,
-                Password = new BCryptHash().HashPassword(command.Password)
+                Password = new BCryptHash().HashPassword(command.Password),
+                UserTypeEnum = command.UserTypeEnum
             };
 
             _userRepository.Add(user);
 
             await _uow.CommitAsync();
 
-            await _mediator.Publish(new CreatedUserNotification { Id = user.Id, Email = user.Email, Name = user.Name, Password = user.Password }, cancellationToken);
+            await _mediator.Publish(new CreatedUserNotification
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Name = user.Name,
+                    Password = user.Password,
+                    UserTypeEnum = user.UserTypeEnum
+                }, cancellationToken);
 
             return user.Id;
         }

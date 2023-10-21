@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Entities.Enums;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,11 @@ namespace Domain.Commands.UserCommands
 {
     public class UpdateUserCommand : UserCommand, IRequest
     {
-        public UpdateUserCommand(string name, string email) 
+        public UpdateUserCommand(string name, string email, UserTypeEnum userTypeEnum) 
         {
             Name = name;
             Email = email;
+            UserTypeEnum = userTypeEnum;
         }
     }
 }
