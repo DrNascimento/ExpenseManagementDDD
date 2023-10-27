@@ -18,7 +18,7 @@ namespace Domain.Validations
         
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            if (_validators is null || _validators.Count() == 0)
+            if (_validators is null || !_validators.Any())
                 return await next();
 
             var validator = _validators.First();
@@ -27,10 +27,5 @@ namespace Domain.Validations
 
             return await next();
         }
-    }
-
-    public class Result
-    {
-
     }
 }

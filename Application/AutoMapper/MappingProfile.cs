@@ -1,6 +1,7 @@
 ﻿using Application.DTO;
 using Application.ViewModel;
 using Application.ViewModel.Account;
+using Application.ViewModel.ExpanseType;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -18,6 +19,8 @@ namespace Application.AutoMapper
             CreateMap<User, LoginResponseViewModel>();
 
             CreateMap<User, UserViewModel>();
+
+            CreateMap<ExpanseType, ExpanseTypeViewModel>();
         }
     }
 }
