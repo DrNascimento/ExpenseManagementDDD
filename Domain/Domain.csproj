@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.Identity\Infrastructure.CrossCutting.Identity.csproj" />
+    <ProjectReference Include="..\Infrastructure.CrossCutting.Identity\Infrastructure.CrossCutting.Identity.csproj" />
   </ItemGroup>
 
 </Project>

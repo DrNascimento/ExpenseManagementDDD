@@ -30,7 +30,7 @@ builder.Services.AddMvc()
 builder.Services.AddDependencyInjectionConfiguration();
 
 builder.Services.AddMediatR(cfg => 
-    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()).RegisterBehaviors());
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()).RegisterBehaviorsValidators());
 
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));

@@ -78,7 +78,7 @@ namespace Infrastructure.CrossCutting
             #endregion
         }
 
-        public static void RegisterBehaviors(this MediatRServiceConfiguration configuration)
+        public static void RegisterBehaviorsValidators(this MediatRServiceConfiguration configuration)
         {
             configuration.AddBehavior<IPipelineBehavior<CreateUserCommand, int>, ValidationBehavior<CreateUserCommand, int>>();
         }
