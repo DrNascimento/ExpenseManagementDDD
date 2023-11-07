@@ -1,5 +1,4 @@
-﻿using Domain.CommandHandler;
-using Domain.Commands.ExpanseTypeCommands;
+﻿using Domain.Commands.ExpanseTypeCommands;
 using Domain.Commands.UserCommands;
 using Domain.Entities;
 using Domain.Interfaces.Repository;

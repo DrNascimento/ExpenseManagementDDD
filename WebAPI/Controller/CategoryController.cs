@@ -20,7 +20,6 @@ namespace WebAPI.Controller
 
         [HttpGet("{int:id}")]
         [ProducesResponseType(typeof(CategoryViewModel), 200)]
-
         public async Task<IActionResult> Get(int id)
         {
             var category = await _categoryAppService.Get(id);

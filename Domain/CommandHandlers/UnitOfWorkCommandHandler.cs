@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.CommandHandler
+namespace Domain.CommandHandlers
 {
-    public abstract class UnitOfWorkCommandHandler 
+    public abstract class UnitOfWorkCommandHandler
     {
         protected IUnitOfWork _uow;
 
-        public UnitOfWorkCommandHandler(IUnitOfWork unitOfWork) 
+        public UnitOfWorkCommandHandler(IUnitOfWork unitOfWork)
         {
             _uow = unitOfWork;
         }

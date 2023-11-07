@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Entities.Enums;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;

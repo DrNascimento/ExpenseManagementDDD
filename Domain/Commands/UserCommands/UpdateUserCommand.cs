@@ -1,4 +1,4 @@
-﻿using Entities.Enums;
+﻿using Domain.Enums;
 using MediatR;
 using System;
 using System.Collections.Generic;

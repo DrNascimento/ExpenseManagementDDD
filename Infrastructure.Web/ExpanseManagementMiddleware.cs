@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using FluentValidation;
 using System.Text.Json;
-using Infrastructure.CrossCutting.Identity.Models;
+using Infrastructure.CrossCutting.Models;
 
-namespace Infrastructure.Web
+namespace Infrastructure.CrossCutting
 {
     public class ExpanseManagementMiddleware
     {
@@ -23,7 +23,7 @@ namespace Infrastructure.Web
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);                
+                Debug.WriteLine(ex.Message);
 
                 var result = new ValidationFailureResponse();
 

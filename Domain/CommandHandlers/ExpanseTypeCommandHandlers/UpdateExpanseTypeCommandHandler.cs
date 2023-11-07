@@ -1,5 +1,4 @@
-﻿using Domain.CommandHandler;
-using Domain.Commands.ExpanseTypeCommands;
+﻿using Domain.Commands.ExpanseTypeCommands;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using MediatR;

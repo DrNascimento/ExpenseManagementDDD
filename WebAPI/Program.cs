@@ -1,6 +1,6 @@
 using Application.AutoMapper;
+using Infrastructure.CrossCutting;
 using Infrastructure.Data.Context;
-using Infrastructure.Web;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
