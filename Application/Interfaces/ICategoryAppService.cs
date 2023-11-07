@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Application.ViewModel.Category;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface ITokenAppService : IDisposable
+    public interface ICategoryAppService : IDisposable
     {
-        string GenerateToken(User user);
-
-        bool ValidateToken(string token);
+        Task<CategoryViewModel> Get(int id);
     }
 }

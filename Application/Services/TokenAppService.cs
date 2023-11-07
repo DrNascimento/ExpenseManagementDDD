@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
-using Infrastructure.Identity;
+using Infrastructure.CrossCutting.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,6 +12,7 @@ namespace Application.Services
     public class TokenAppService : ITokenAppService
     {
         private readonly JwtSettings _jwtSettings;
+        private bool disposedValue;
 
         public TokenAppService(IOptions<JwtSettings> options) 
         {
@@ -69,6 +70,20 @@ namespace Application.Services
             };
 
             return validationParameters;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

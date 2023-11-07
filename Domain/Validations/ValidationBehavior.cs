@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Domain.Validations
 {
     public class ValidationBehavior<TRequest, TResponse>
-        : IPipelineBehavior<TRequest, TResponse>
+        : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
@@ -21,9 +21,7 @@ namespace Domain.Validations
             if (_validators is null || !_validators.Any())
                 return await next();
 
-            var validator = _validators.First();
-            
-            await validator.ValidateAndThrowAsync(request, cancellationToken);
+            await _validators.First().ValidateAndThrowAsync(request, cancellationToken);
 
             return await next();
         }

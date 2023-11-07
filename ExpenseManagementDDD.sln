@@ -27,9 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Core", "Domain.Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.SQLiteDatabase", "Infrastructure.SQLiteDatabase\Infrastructure.SQLiteDatabase.csproj", "{668EA975-4947-4E32-8276-14F5472D9731}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Identity", "Infrastructure.Identity\Infrastructure.Identity.csproj", "{1239B1B9-ADD0-4184-8FE2-821B3E3D6147}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.CrossCutting.Identity", "Infrastructure.Identity\Infrastructure.CrossCutting.Identity.csproj", "{1239B1B9-ADD0-4184-8FE2-821B3E3D6147}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Web", "Infrastructure.Web\Infrastructure.Web.csproj", "{22B575A3-2BEC-4150-9E80-728B4A600238}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.CrossCutting", "Infrastructure.Web\Infrastructure.CrossCutting.csproj", "{22B575A3-2BEC-4150-9E80-728B4A600238}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

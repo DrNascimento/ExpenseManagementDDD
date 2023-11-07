@@ -25,14 +25,14 @@ namespace Domain.CommandHandlers.UserCommandHandlers
             _userRepository = userRepository;
         }
 
-        public Task Handle(DeleteUserCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetById(request.Id) 
+                ?? throw new InvalidOperationException("user not found");
+
+            _userRepository.Delete(user);
+            await _uow.CommitAsync();
+            await _mediator.Publish("");
         }
     }
 }

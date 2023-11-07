@@ -25,7 +25,6 @@ namespace WebAPI.Controller
             
             var id = await _accountAppService.Create(newAccount);
 
-
             return Created(string.Empty, new { id });
         }
 
@@ -35,10 +34,9 @@ namespace WebAPI.Controller
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var id = await _accountAppService.LogIn(loginViewModel);
+            var token = await _accountAppService.LogIn(loginViewModel);
 
-
-            return Ok(new { id });
+            return Ok(new { token });
         }
     }
 }

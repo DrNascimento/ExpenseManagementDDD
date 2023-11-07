@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Identity
+namespace Infrastructure.CrossCutting.Identity
 {
-    public class BCryptHash
+    public static class BCryptHash
     {
-        public string HashPassword(string password)
+        public static string HashPassword(string password)
         {
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
 
@@ -17,7 +17,7 @@ namespace Infrastructure.Identity
             return hashedPassword;
         }
 
-        public bool VerifyPassword(string password, string hashedPassword)
+        public static bool VerifyPassword(string password, string hashedPassword)
         {
             bool isValid = BCrypt.Net.BCrypt.Verify(password, hashedPassword);
 

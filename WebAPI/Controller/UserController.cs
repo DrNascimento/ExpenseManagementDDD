@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Infrastructure.CrossCutting.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Helper;

@@ -21,6 +21,9 @@ csharp_style_expression_bodied_local_functions = false:silent
 # CS0108: Member hides inherited member; missing new keyword
 dotnet_diagnostic.CS0108.severity = none
 
+# CS8618: Non nullable field _name is not initialized. Consider declare the field as nullable type
+dotnet_diagnostic.CS8618.severity = none
+
 [*.{cs,vb}]
 #### Naming styles ####
 

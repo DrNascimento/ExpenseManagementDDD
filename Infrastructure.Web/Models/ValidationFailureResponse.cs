@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Web.Models
+namespace Infrastructure.CrossCutting.Identity.Models
 {
     public class ValidationFailureResponse
     {

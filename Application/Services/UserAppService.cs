@@ -9,6 +9,7 @@ namespace Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private bool disposedValue;
 
         public UserAppService(IUserRepository userRepository,
             IMapper mapper) 
@@ -33,6 +34,20 @@ namespace Application.Services
             var usersViewModel = _mapper.Map<IEnumerable<UserViewModel>>(users);
 
             return usersViewModel;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

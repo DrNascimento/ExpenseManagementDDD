@@ -1,34 +1,22 @@
-﻿using Application.Helper;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.ViewModel.Account;
 using AutoMapper;
 using Domain.Commands.UserCommands;
 using Domain.Entities;
 using Domain.Interfaces.Repository;
-using Infrastructure.Identity;
+using Infrastructure.CrossCutting.Identity;
 using MediatR;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 
 namespace Application.Services
 {
     public class AccountAppService : IAccountAppService
     {
-       
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
         private readonly ITokenAppService _tokenAppService;
+        private bool disposedValue;
 
         public AccountAppService(IUserRepository userRepository,
             IMapper mapper,
@@ -74,11 +62,11 @@ namespace Application.Services
 
             if (string.IsNullOrWhiteSpace(loginViewModel.Email))
                 throw new 
-                    ApplicationException($"{nameof(loginViewModel.Email)} cannot be empty");
+                    InvalidOperationException($"{nameof(loginViewModel.Email)} cannot be empty");
 
             if (string.IsNullOrEmpty(loginViewModel.Password))
                 throw new
-                    ApplicationException($"{nameof(loginViewModel.Password)} cannot be empty");
+                    InvalidOperationException($"{nameof(loginViewModel.Password)} cannot be empty");
         }
 
 
@@ -86,31 +74,24 @@ namespace Application.Services
         private static LoginViewModel OnBeforeLoginApply(LoginViewModel loginViewModel)
         {
             loginViewModel.Email = loginViewModel.Email.Trim();
-            loginViewModel.Password = loginViewModel.Password;
 
             return loginViewModel;
         }
 
         private static void ValidateAfterLogin(User user, string unhashedPassword)
         {
-            if (user is null)
-                throw 
-                    new ApplicationException("Email or password is invalid");
-
-            if (new BCryptHash().VerifyPassword(unhashedPassword, user.Password) == false)
-                throw
-                    new ApplicationException("Email or password is invalid");
-
+            if (user is null || !BCryptHash.VerifyPassword(unhashedPassword, user.Password))
+                throw new InvalidOperationException("Email or password is invalid");
         }
 
 
         private static void ValidateBeforeCreate(CreateNewAccountViewModel createNewAccount)
         {
             if (createNewAccount == null)
-                throw new ApplicationException("Email and password is required");
+                throw new ArgumentNullException(nameof(createNewAccount));
 
             if (createNewAccount.ConfirmPassword != createNewAccount.Password)
-                throw new ApplicationException("The passwords does not match");
+                throw new InvalidOperationException("The passwords does not match");
         }
 
         private static CreateNewAccountViewModel ApplyBeforeCreate(CreateNewAccountViewModel createNewAccount)
@@ -119,8 +100,22 @@ namespace Application.Services
             createNewAccount.Name = createNewAccount.Name.Trim();
 
             return createNewAccount;
-        }  
-        
+        }
+
         #endregion
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

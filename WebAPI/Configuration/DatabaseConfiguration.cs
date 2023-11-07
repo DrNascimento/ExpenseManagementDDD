@@ -4,10 +4,8 @@
     {
         public static string GetPathSQLite(this ConfigurationManager configuration)
         {
-            string directoryName = configuration is null ? null : configuration.GetConnectionString("DefaultConnection");
-
-            if (string.IsNullOrWhiteSpace(directoryName))
-                throw new ApplicationException("Database path is not defined.");
+            string directoryName = configuration?.GetConnectionString("DefaultConnection") ??
+                throw new InvalidOperationException("Database path is not defined.");                 
 
             string path = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", directoryName));
 

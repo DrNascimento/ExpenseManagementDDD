@@ -17,6 +17,7 @@ namespace Application.Services
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
         private readonly IExpanseTypeRepository _expanseTypeRepository;
+        private bool disposedValue;
 
         public ExpanseTypeAppService(IMapper mapper,
             IMediator mediator,
@@ -47,6 +48,20 @@ namespace Application.Services
             var command = _mapper.Map<CreateExpanseTypeCommand>(expanseTypeViewModel);
 
             return await _mediator.Send(command);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

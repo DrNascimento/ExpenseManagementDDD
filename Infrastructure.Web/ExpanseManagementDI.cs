@@ -13,33 +13,14 @@ using FluentValidation;
 using Infrastructure.Data.Repository;
 using Infrastructure.Data.Repository.UnitOfWork;
 using MediatR;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace WebAPI.Configuration
+namespace Infrastructure.CrossCutting
 {
-    public static class DependecyInjector
+    public static class ExpanseManagementDI
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="services"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public static void AddDependencyInjectionConfiguration(this IServiceCollection services)
-        {
-            if (services == null) throw new ArgumentNullException(nameof(services));
 
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IUserContext, UserContext>();
-
-            RegisterServices(services);
-        }
-
-        private static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services)
         {
             #region Registering
 
@@ -81,7 +62,7 @@ namespace WebAPI.Configuration
 
             // AppService
             services.AddScoped<IUserAppService, UserAppService>();
-              
+
             // Command
             services.AddScoped<IRequestHandler<CreateUserCommand, int>, CreateUserCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateUserCommand>, UpdateUserCommandHandler>();
@@ -97,7 +78,7 @@ namespace WebAPI.Configuration
             #endregion
         }
 
-        public static void RegisterBehaviors(this Microsoft.Extensions.DependencyInjection.MediatRServiceConfiguration configuration)
+        public static void RegisterBehaviors(this MediatRServiceConfiguration configuration)
         {
             configuration.AddBehavior<IPipelineBehavior<CreateUserCommand, int>, ValidationBehavior<CreateUserCommand, int>>();
         }

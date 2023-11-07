@@ -2,7 +2,7 @@
 
 namespace Application.Interfaces
 {
-    public interface IExpanseTypeAppService
+    public interface IExpanseTypeAppService : IDisposable
     {
         Task<int> Create(ExpanseTypeViewModel expanseTypeViewModel);
 

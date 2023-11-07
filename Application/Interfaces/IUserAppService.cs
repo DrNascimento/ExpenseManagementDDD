@@ -2,7 +2,7 @@
 
 namespace Application.Interfaces
 {
-    public interface IUserAppService
+    public interface IUserAppService : IDisposable
     {
 
         Task<UserViewModel> GetById(int id);

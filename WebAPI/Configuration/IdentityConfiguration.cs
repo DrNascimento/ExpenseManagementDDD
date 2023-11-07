@@ -1,4 +1,4 @@
-﻿using Infrastructure.Identity;
+﻿using Infrastructure.CrossCutting.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -16,7 +16,7 @@ namespace WebAPI.Configuration
         /// <exception cref="ArgumentNullException"></exception>
         public static void AddIdentitySetup(this IServiceCollection services, IConfiguration configuration)
         {
-            ArgumentNullException.ThrowIfNull(services, nameof(services));
+            ArgumentNullException.ThrowIfNull(services);
 
             // JWT Setup
             var appSettingsSection = configuration.GetSection("JwtSettings");

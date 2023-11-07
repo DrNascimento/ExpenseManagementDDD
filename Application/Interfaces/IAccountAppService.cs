@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IAccountAppService
+    public interface IAccountAppService : IDisposable
     {
-        Task<int> Create(CreateNewAccountViewModel newAccount);
+        Task<int> Create(CreateNewAccountViewModel createNewAccountViewModel);
 
-        Task<string> LogIn(LoginViewModel login);
+        Task<string> LogIn(LoginViewModel loginViewModel);
     }
 }

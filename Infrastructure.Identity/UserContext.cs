@@ -1,29 +1,32 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-public interface IUserContext
+namespace Infrastructure.CrossCutting.Identity
 {
-    string UserId { get;  }
-    string UserName { get; }
-    string Role { get; }
-}
-
-public class UserContext : IUserContext
-{
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public UserContext(IHttpContextAccessor httpContextAccessor)
+    public interface IUserContext
     {
-        _httpContextAccessor = httpContextAccessor;
+        string UserId { get; }
+        string UserName { get; }
+        string Role { get; }
     }
 
-    public string UserId
-        => _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    public class UserContext : IUserContext
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public string UserName =>
-        _httpContextAccessor.HttpContext?.User.Identity?.Name;
+        public UserContext(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
 
-    public string Role =>
-        _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value;
+        public string UserId
+            => _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+        public string UserName =>
+            _httpContextAccessor.HttpContext?.User.Identity?.Name;
+
+        public string Role =>
+            _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value;
+
+    }
 }

@@ -4,7 +4,7 @@ using Domain.Entities;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using Domain.Notifications.UserNotifications;
-using Infrastructure.Identity;
+using Infrastructure.CrossCutting.Identity;
 using MediatR;
 
 namespace Domain.CommandHandlers.UserCommandHandlers
@@ -29,7 +29,7 @@ namespace Domain.CommandHandlers.UserCommandHandlers
             {
                 Name = command.Name,
                 Email = command.Email,
-                Password = new BCryptHash().HashPassword(command.Password),
+                Password = BCryptHash.HashPassword(command.Password),
                 UserTypeEnum = command.UserTypeEnum
             };
 
