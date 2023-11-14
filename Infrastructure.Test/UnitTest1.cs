@@ -1,4 +1,4 @@
-using Entities.Entities;
+
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
@@ -12,12 +12,6 @@ namespace Infrastructure.Test
         {
             string name = "Test";
             string email = "nicholas.nascimento@gmail.com";
-
-            var user = new User
-            {
-                Name = name,
-                Email = email
-            };
 
         }
     }

@@ -7,14 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Entities\Entities.csproj" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CommandHandler\" />
-    <Folder Include="Command\" />
-    <Folder Include="Events\" />
-    <Folder Include="Models\" />
+    <PackageReference Include="FluentValidation" Version="11.6.0" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.CrossCutting.Identity\Infrastructure.CrossCutting.Identity.csproj" />
   </ItemGroup>
 
 </Project>
