@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Commands.UserCommands
 {
-    public class UpdateUserCommand : UserCommand, IRequest
+    public class UpdateUserCommand : UserCommand, IRequest<Unit>
     {
-        public UpdateUserCommand(string name, string email, UserTypeEnum userTypeEnum) 
+        public UpdateUserCommand(int id, string name, string email, UserTypeEnum userTypeEnum) 
         {
+            Id = id;
             Name = name;
             Email = email;
             UserTypeEnum = userTypeEnum;

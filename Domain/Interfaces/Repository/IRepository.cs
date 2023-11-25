@@ -20,6 +20,8 @@ namespace Domain.Interfaces.Repository
 
         Task<TEntity> GetById(int id);
 
+        Task<TEntity> GetByIdIncludingDeleted(int id);
+
         IQueryable<TEntity> GetAll();
     }
 }

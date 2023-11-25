@@ -1,8 +1,5 @@
-﻿using Domain.Commands.UserCommands;
-using Domain.Validations;
-using Infrastructure.CrossCutting;
+﻿using Infrastructure.CrossCutting;
 using Infrastructure.CrossCutting.Identity;
-using MediatR;
 
 namespace WebAPI.Configuration
 {
@@ -21,14 +18,7 @@ namespace WebAPI.Configuration
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUserContext, UserContext>();
 
-            ExpanseManagementDI.RegisterServices(services);
+            ExpenseManagementDI.RegisterServices(services);
         }
-
-       
-        public static void RegisterBehaviors(this Microsoft.Extensions.DependencyInjection.MediatRServiceConfiguration configuration)
-        {
-            configuration.AddBehavior<IPipelineBehavior<CreateUserCommand, int>, ValidationBehavior<CreateUserCommand, int>>();
-        }
-
     }
 }

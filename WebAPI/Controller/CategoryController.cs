@@ -8,7 +8,7 @@ namespace WebAPI.Controller
 {
     [Authorize]
     [ApiController]
-    [Route("api/category")]
+    [Route("api/categories")]
     public class CategoryController : ApiController
     {
         private readonly ICategoryAppService _categoryAppService;
@@ -18,12 +18,64 @@ namespace WebAPI.Controller
             _categoryAppService = categoryAppService;
         }
 
-        [HttpGet("{int:id}")]
-        [ProducesResponseType(typeof(CategoryViewModel), 200)]
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(CreateCategoryViewModel), 200)]
         public async Task<IActionResult> Get(int id)
         {
             var category = await _categoryAppService.Get(id);
+
             return category is null ? NotFound() : Ok(category);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<CreateCategoryViewModel>), 200)]
+        public IActionResult GetAll()
+        {
+            var categories = _categoryAppService.GetAll();
+
+            return Ok(categories);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> Post(CreateCategoryViewModel categoryViewModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var id = await _categoryAppService.CreateByUser(categoryViewModel);
+            return Ok(new { id });
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("universal")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> PostAdmin(CreateCategoryViewModel categoryViewModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var id = await _categoryAppService.CreateUniversal(categoryViewModel);
+            return Ok(new { id });
+        }
+
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateCategoryViewModel updateCategoryViewModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _categoryAppService.Update(id, updateCategoryViewModel);
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _categoryAppService.Delete(id);
+            return Ok();
         }
     }
 }

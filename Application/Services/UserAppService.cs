@@ -2,6 +2,9 @@
 using Application.ViewModel;
 using Domain.Interfaces.Repository;
 using AutoMapper;
+using Application.ViewModel.User;
+using Domain.Commands.UserCommands;
+using MediatR;
 
 namespace Application.Services
 {
@@ -9,13 +12,16 @@ namespace Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
         private bool disposedValue;
 
         public UserAppService(IUserRepository userRepository,
-            IMapper mapper) 
+            IMapper mapper,
+            IMediator mediator)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         public async Task<UserViewModel> GetById(int id)
@@ -35,6 +41,13 @@ namespace Application.Services
 
             return usersViewModel;
         }
+
+        public async Task Update(int id, UpdateUserViewModel updateUserViewModel)
+        {
+            updateUserViewModel.Id = id;
+            var command = _mapper.Map<UpdateUserCommand>(updateUserViewModel);
+            await _mediator.Send(command);
+    }
 
         protected virtual void Dispose(bool disposing)
         {

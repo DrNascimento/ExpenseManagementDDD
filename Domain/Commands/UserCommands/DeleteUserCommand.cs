@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Commands.UserCommands
 {
-    public class DeleteUserCommand : UserCommand, IRequest
+    public class DeleteUserCommand : UserCommand, IRequest<Unit>
     {
         public DeleteUserCommand(int id) 
         {

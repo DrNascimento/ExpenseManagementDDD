@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Domain.CommandHandlers.UserCommandHandlers
 {
-    public class DeleteUserCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<DeleteUserCommand>
+    public class DeleteUserCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<DeleteUserCommand, Unit>
     {
         private readonly IMediator _mediator;
         private readonly IUserRepository _userRepository;
@@ -24,14 +24,16 @@ namespace Domain.CommandHandlers.UserCommandHandlers
             _userRepository = userRepository;
         }
 
-        public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetById(request.Id) 
                 ?? throw new InvalidOperationException("user not found");
 
             _userRepository.Delete(user);
             await _uow.CommitAsync();
-            await _mediator.Publish("");
+
+
+            return Unit.Value;
         }
     }
 }

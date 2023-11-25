@@ -13,11 +13,11 @@ namespace Infrastructure.Data.Repository
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
-        protected new readonly ExpanseManagementContext Db;
+        protected new readonly ExpenseManagementContext Db;
         protected new readonly DbSet<User> DbSet;
 
 
-        public UserRepository(ExpanseManagementContext context) 
+        public UserRepository(ExpenseManagementContext context) 
             : base(context) 
         {
             Db = context;

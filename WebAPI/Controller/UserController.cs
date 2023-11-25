@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.ViewModel.User;
 using Infrastructure.CrossCutting.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace WebAPI.Controller
 {
     [Authorize]
     [ApiController]
-    [Route("api/user")]
+    [Route("api/users")]
     public class UserController : ApiController
     {
         private readonly IUserAppService _userAppService;
@@ -32,7 +33,7 @@ namespace WebAPI.Controller
 
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public ActionResult GetAll ()
+        public ActionResult GetAll()
         {
             var users = _userAppService.GetAll();
 
@@ -44,6 +45,17 @@ namespace WebAPI.Controller
         {
             var currentUser = Convert.ToInt16(_userContext.UserId);
             return Ok(await _userAppService.GetById(currentUser));
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateUserViewModel updateUserViewModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _userAppService.Update(id, updateUserViewModel);
+
+            return Ok();
         }
     }
 }

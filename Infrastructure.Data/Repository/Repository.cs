@@ -1,4 +1,5 @@
-﻿using Domain.Interfaces.Repository;
+﻿using Domain.Entities;
+using Domain.Interfaces.Repository;
 using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repository
 {
-    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : EntityBase
     {
-        protected readonly ExpanseManagementContext Db;
+        protected readonly ExpenseManagementContext Db;
         protected readonly DbSet<TEntity> DbSet;
 
-        public Repository(ExpanseManagementContext context)
+        protected Repository(ExpenseManagementContext context)
         {
             Db = context;
             DbSet = Db.Set<TEntity>();
@@ -22,13 +23,13 @@ namespace Infrastructure.Data.Repository
 
         public void Add(TEntity entity)
         {
-            SetCreatedField(entity, DateTime.UtcNow);
+            entity.Created = DateTime.UtcNow;
             DbSet.Add(entity);
         }
 
         public void Delete(TEntity entity)
         {
-            SetIsDeleteField(entity, true);
+            entity.IsDeleted = true;
             Update(entity);
         }
 
@@ -44,33 +45,24 @@ namespace Infrastructure.Data.Repository
 
         public void Update(TEntity entity)
         {
-            SetUpdatedField(entity, DateTime.UtcNow);
+            entity.Updated = DateTime.UtcNow;
             Db.Update(entity);
         }
 
-        public virtual async Task<TEntity> GetById(int iid)
+        public virtual async Task<TEntity> GetById(int id)
         {
-            return await DbSet.FindAsync(iid);
+            return await DbSet
+                .FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
+        }
+
+        public virtual async Task<TEntity> GetByIdIncludingDeleted(int id)
+        {
+            return await DbSet.FindAsync(id);
         }
 
         public virtual IQueryable<TEntity> GetAll()
         {
-            return DbSet.AsNoTracking();
-        }
-
-        private void SetCreatedField(TEntity entity, DateTime createdAt)
-        {
-            entity.GetType().GetProperty("Created")?.SetValue(entity, createdAt);
-        }
-
-        private void SetIsDeleteField(TEntity entity, bool isDelete)
-        {
-            entity.GetType().GetProperty("IsDeleted")?.SetValue(entity, isDelete);
-        }
-
-        private void SetUpdatedField(TEntity entity, DateTime updatedAt)
-        {
-            entity.GetType().GetProperty("Created")?.SetValue(entity, updatedAt);
+            return DbSet.AsNoTracking().Where(x => !x.IsDeleted);
         }
     }
   }

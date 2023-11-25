@@ -1,7 +1,6 @@
 using Application.AutoMapper;
 using Infrastructure.CrossCutting;
 using Infrastructure.Data.Context;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using WebAPI.Configuration;
@@ -9,7 +8,7 @@ using WebAPI.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddDbContext<ExpanseManagementContext>(options =>
+builder.Services.AddDbContext<ExpenseManagementContext>(options =>
     options.UseSqlite(builder.Configuration.GetPathSQLite()));
 builder.Configuration
     .SetBasePath(builder.Environment.ContentRootPath)
@@ -36,10 +35,14 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddIdentitySetup(builder.Configuration);
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseMiddleware<ExpanseManagementMiddleware>();
+app.UseSwaggerUI();
+app.UseSwagger(x => x.SerializeAsV2 = true);
+
+app.UseMiddleware<ExpenseManagementMiddleware>();
 
 if (!app.Environment.IsDevelopment())
 {

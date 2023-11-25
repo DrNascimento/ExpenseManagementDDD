@@ -1,7 +1,9 @@
 ﻿using Application.DTO;
 using Application.ViewModel;
 using Application.ViewModel.Account;
-using Application.ViewModel.ExpanseType;
+using Application.ViewModel.Category;
+using Application.ViewModel.Expense;
+using Application.ViewModel.ExpenseType;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -20,7 +22,13 @@ namespace Application.AutoMapper
 
             CreateMap<User, UserViewModel>();
 
-            CreateMap<ExpanseType, ExpanseTypeViewModel>();
+            CreateMap<ExpenseType, ExpenseTypeViewModel>();
+
+            CreateMap<Expense, ExpenseViewModel>();
+
+            CreateMap<ExpenseInstallment, InstallmentViewModel>();
+
+            CreateMap<Category, CategoryViewModel>();
         }
     }
 }

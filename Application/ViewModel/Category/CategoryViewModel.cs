@@ -14,6 +14,6 @@ namespace Application.ViewModel.Category
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
-       
+
     }
 }

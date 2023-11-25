@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Domain.CommandHandlers.UserCommandHandlers
 {
-    public class UpdateUserCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<UpdateUserCommand>
+    public class UpdateUserCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<UpdateUserCommand, Unit>
     {
         private readonly IUserRepository _userRepository;
 
@@ -21,10 +21,10 @@ namespace Domain.CommandHandlers.UserCommandHandlers
             _userRepository = userRepository;
         }
 
-        public Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
-
+            await Task.Delay(500);
+            return Unit.Value;
         }
 
     }
