@@ -9,5 +9,15 @@ namespace WebAPI.Helper
         { 
 
         }
+
+        /// <summary>
+        /// Returns Ok when <paramref name="result"/> is not null, otherwise returns NotFound
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        protected IActionResult OkFind(object result)
+        {
+            return result is null ? NotFound() : Ok(result);    
+        }
     }
 }

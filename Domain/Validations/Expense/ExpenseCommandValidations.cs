@@ -45,7 +45,8 @@ namespace Domain.Validations.Expense
 
         public void ValidateDueDate() =>
             RuleFor(e => e.ExpenseInstallmentDueDate)
-                .InclusiveBetween(DateTime.UtcNow.Date, DateTime.MaxValue);
+                .InclusiveBetween(DateTime.UtcNow.Date, DateTime.MaxValue)
+                .WithMessage("The Due Date must be greater than or equal to today");
 
     }
 }

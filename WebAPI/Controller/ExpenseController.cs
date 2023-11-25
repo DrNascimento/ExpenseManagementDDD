@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.ViewModel.Expense;
-using Infrastructure.CrossCutting.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Helper;
@@ -26,14 +25,15 @@ namespace WebAPI.Controller
                 return BadRequest(ModelState);
 
             var id = await _expenseAppService.Create(createExpenseViewModel);
-            return Ok(id);
+            return Ok(new { id });
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id)
+        public IActionResult Get(int id)
         {
-            var expenseViewModel = await _expenseAppService.Get(id);
-            return Ok(expenseViewModel);
+            var expenseViewModel = _expenseAppService.Get(id);
+
+            return OkFind(expenseViewModel);
         }
 
         [HttpGet]
@@ -50,7 +50,7 @@ namespace WebAPI.Controller
             return Ok();
         }
 
-        [HttpPut("{id:int}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _expenseAppService.Delete(id);

@@ -12,6 +12,7 @@ using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using Domain.Validations;
 using Domain.Validations.CategoryCommandValidations;
+using Domain.Validations.Expense;
 using Domain.Validations.ExpenseTypeCommandValidations;
 using Domain.Validations.UserCommandValidations;
 using FluentValidation;
@@ -58,16 +59,16 @@ namespace Infrastructure.CrossCutting
 
             // Command
             services.AddScoped<IRequestHandler<CreateExpenseCommand, int>, CreateExpenseCommandHandler>();
-            //services.AddScoped<IRequestHandler<UpdateExpenseTypeCommand, Unit>, UpdateExpenseTypeCommandHandler>();
-            //services.AddScoped<IRequestHandler<DeleteExpenseTypeCommand, Unit>, DeleteExpenseTypeCommandHandler>();
+            services.AddScoped<IRequestHandler<UpdateExpenseCommand, Unit>, UpdateExpenseCommandHandler>();
+            services.AddScoped<IRequestHandler<DeleteExpenseCommand, Unit>, DeleteExpenseCommandHandler>();
 
 
             // Repository
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
-            //services.AddScoped<IValidator<CreateExpenseTypeCommand>, CreateExpenseTypeCommandValidator>();
-            //services.AddScoped<IValidator<UpdateExpenseTypeCommand>, UpdateExpenseTypeCommandValidator>();
-            //services.AddScoped<IValidator<DeleteExpenseTypeCommand>, DeleteExpenseTypeCommandValidator>();
+            services.AddScoped<IValidator<CreateExpenseCommand>, CreateExpenseCommandValidator>();
+            services.AddScoped<IValidator<UpdateExpenseCommand>, UpdateExpenseCommandValidator>();
+            services.AddScoped<IValidator<DeleteExpenseCommand>, DeleteExpenseCommandValidator>();
             #endregion
 
             #region ExpenseInstallment
@@ -87,7 +88,6 @@ namespace Infrastructure.CrossCutting
             //services.AddScoped<IValidator<UpdateExpenseTypeCommand>, UpdateExpenseTypeCommandValidator>();
             //services.AddScoped<IValidator<DeleteExpenseTypeCommand>, DeleteExpenseTypeCommandValidator>();
             #endregion
-
 
             #region ExpenseType
 
@@ -152,6 +152,10 @@ namespace Infrastructure.CrossCutting
             configuration.AddBehavior<IPipelineBehavior<CreateCategoryCommand, int>, ValidationBehavior<CreateCategoryCommand, int>>();
             configuration.AddBehavior<IPipelineBehavior<UpdateCategoryCommand, Unit>, ValidationBehavior<UpdateCategoryCommand, Unit>>();
             configuration.AddBehavior<IPipelineBehavior<DeleteCategoryCommand, Unit>, ValidationBehavior<DeleteCategoryCommand, Unit>>();
+
+            configuration.AddBehavior<IPipelineBehavior<CreateExpenseCommand, int>, ValidationBehavior<CreateExpenseCommand, int>>();
+            configuration.AddBehavior<IPipelineBehavior<UpdateExpenseCommand, Unit>, ValidationBehavior<UpdateExpenseCommand, Unit>>();
+            configuration.AddBehavior<IPipelineBehavior<DeleteExpenseCommand, Unit>, ValidationBehavior<DeleteExpenseCommand, Unit>>();
         }
 
     }

@@ -10,5 +10,8 @@ namespace Domain.Interfaces.Repository
     public interface IExpenseRepository : IRepository<Expense>
     {
         IEnumerable<Expense> GetExpenses(int userId);
+
+        IQueryable<Expense> GetExpenses();
+
     }
 }

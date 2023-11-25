@@ -31,6 +31,9 @@ namespace Infrastructure.Data.Repository
                     !e.IsDeleted && e.UserId == userId);
         }
 
+        public IQueryable<Expense> GetExpenses() =>
+            GetIncludes();
+
         private IQueryable<Expense> GetIncludes() =>
             DbSet
                 .Include(x => x.Category)

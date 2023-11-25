@@ -40,7 +40,7 @@ namespace Application.AutoMapper
                 .ConstructUsing(e => new CreateExpenseCommand(e.UserId, e.Name, e.ExpenseTypeId, e.CategoryId,
                     e.Installments, e.ExpenseInstallmentAmmount, e.ExpenseInstallmentDueDate));
 
-            CreateMap<UpdateExpenseCommand, UpdateExpenseCommand>()
+            CreateMap<UpdateExpenseViewModel, UpdateExpenseCommand>()
                 .ConstructUsing(e => new UpdateExpenseCommand(e.Id, e.Name, e.CategoryId));
 
             

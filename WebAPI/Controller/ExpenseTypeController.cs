@@ -29,8 +29,8 @@ namespace WebAPI.Controller
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var expenseViewModel = await _expenseTypeAppService.GetById(id);
-            return expenseViewModel is null ? NotFound() : Ok(expenseViewModel);
+            var expenseTypeViewModel = await _expenseTypeAppService.GetById(id);
+            return OkFind(expenseTypeViewModel);
         }
 
         [Authorize(Roles = "admin")]

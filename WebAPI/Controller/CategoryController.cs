@@ -24,7 +24,7 @@ namespace WebAPI.Controller
         {
             var category = await _categoryAppService.Get(id);
 
-            return category is null ? NotFound() : Ok(category);
+            return OkFind(category);
         }
 
         [HttpGet]

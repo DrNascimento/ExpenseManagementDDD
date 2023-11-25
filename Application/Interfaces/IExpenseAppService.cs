@@ -11,7 +11,7 @@ namespace Application.Interfaces
     {
         Task<int> Create(CreateExpenseViewModel createExpenseViewModel);
 
-        Task<ExpenseViewModel> Get(int id);
+        ExpenseViewModel Get(int id);
 
         IEnumerable<ExpenseViewModel> GetAll();
 

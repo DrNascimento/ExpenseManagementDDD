@@ -32,15 +32,32 @@ namespace Application.Services
             _userContext = userContext;
         }
 
-        public async Task<ExpenseViewModel> Get(int id)
+        public ExpenseViewModel Get(int id)
         {
-            var expense = await _expenseRepository.GetById(id);
+            var expense = _expenseRepository
+                .GetExpenses(Convert.ToInt16(_userContext.UserId))
+                .FirstOrDefault(e => e.Id == id);
+
             return _mapper.Map<ExpenseViewModel>(expense);
         }
 
         public IEnumerable<ExpenseViewModel> GetAll()
         {
             var expenses = _expenseRepository.GetExpenses(Convert.ToInt16(_userContext.UserId));
+            return _mapper.Map<IEnumerable<ExpenseViewModel>>(expenses);
+        }
+
+        public IEnumerable<ExpenseViewModel> GetByDate(int year, int month, int day)
+        {
+            var expenses = _expenseRepository.GetExpenses();
+
+            expenses.Where(e =>
+                e.ExpenseInstallments
+                    .Any(ei => ei.DueDate.Year == year
+                        && (month < 1 || ei.DueDate.Month == month)
+                        && (day < 1 || ei.DueDate.Day == day)
+                        ));
+
             return _mapper.Map<IEnumerable<ExpenseViewModel>>(expenses);
         }
 
@@ -88,7 +105,5 @@ namespace Application.Services
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
-
-
     }
 }
