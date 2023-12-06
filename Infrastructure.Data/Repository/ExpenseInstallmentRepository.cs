@@ -14,11 +14,12 @@ namespace Infrastructure.Data.Repository
     {
         public ExpenseInstallmentRepository(ExpenseManagementContext context) : base(context)
         {
+
         }
 
         public async Task DeleteByExpenseId(int expenseId)
         {
-            await Db.ExpenseInstallments
+            await DbSet
                 .Where(x => x.ExpenseId == expenseId)
                 .ExecuteUpdateAsync(x => 
                     x.SetProperty(e => e.IsDeleted, e => true)
@@ -26,5 +27,36 @@ namespace Infrastructure.Data.Repository
 
             SaveChanges();
         }
+
+        public async Task<ExpenseInstallment> GetExpenseInstallment(int id, int userId)
+        {
+            return await GetIncludes()
+                .FirstOrDefaultAsync(e =>
+                    !e.IsDeleted 
+                    && e.Id == id
+                    && e.Expense.UserId == userId);
+        }
+
+        public IEnumerable<ExpenseInstallment> GetExpenseInstallments(int userId)
+        {
+            return GetIncludes()
+                .Where(e => !e.IsDeleted 
+                    && e.Expense.UserId == userId);
+        }
+
+        public bool HasByUserIdAndId(int id, int userId)
+        {
+            return DbSet.Any(e =>
+                !e.IsDeleted
+                && e.Id == userId
+                && e.Expense.UserId == userId);
+        }
+
+        private IQueryable<ExpenseInstallment> GetIncludes() =>
+            DbSet
+                .Include(e => e.Expense)
+                    .ThenInclude(e => e.Category)
+                .Include(e => e.Expense)
+                    .ThenInclude(e => e.ExpenseType);
     }
 }

@@ -73,7 +73,7 @@ namespace Infrastructure.CrossCutting
 
             #region ExpenseInstallment
             // AppService
-            
+            services.AddScoped<IExpenseInstallmentAppService, ExpenseInstallmentAppService>();
 
             // Command
             //services.AddScoped<IRequestHandler<CreateExpenseCommand, int>, CreateExpenseCommandHandler>();

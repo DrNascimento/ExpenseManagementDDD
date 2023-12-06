@@ -3,6 +3,7 @@ using Application.ViewModel;
 using Application.ViewModel.Account;
 using Application.ViewModel.Category;
 using Application.ViewModel.Expense;
+using Application.ViewModel.ExpenseInstallment;
 using Application.ViewModel.ExpenseType;
 using AutoMapper;
 using Domain.Entities;
@@ -26,7 +27,11 @@ namespace Application.AutoMapper
 
             CreateMap<Expense, ExpenseViewModel>();
 
+            CreateMap<Expense, ExpenseToInstallment>();
+
             CreateMap<ExpenseInstallment, InstallmentViewModel>();
+
+            CreateMap<ExpenseInstallment, ExpenseInstallmentViewModel>();            
 
             CreateMap<Category, CategoryViewModel>();
         }
