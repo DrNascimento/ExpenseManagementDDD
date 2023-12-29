@@ -8,12 +8,15 @@ namespace Domain.Commands.ExpenseInstallmentCommands
 {
     public class ExpenseInstallmentCommand
     {
-        public int Id { get; set; }
+        public int Id { get; protected set; }
 
-        public double Amount { get; set; }
+        public double Amount { get; protected set; }
 
-        public bool IsPaid { get; set; }
+        public DateTime DueDate { get; protected set; }
 
-        
+        public bool IsPaid { get; protected set; }
+
+        public int UserId { get; protected set; }
+
     }
 }

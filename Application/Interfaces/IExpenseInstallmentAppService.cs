@@ -11,5 +11,9 @@ namespace Application.Interfaces
     {
         Task<ExpenseInstallmentViewModel> Get(int id);
         IEnumerable<ExpenseInstallmentViewModel> GetByDate(int year, int month, int day);
+        Task Update(int id, UpdateExpenseInstallmentViewModel updateExpenseInstallmentViewModel);
+        Task UpdatePaid(int id);
+        Task Delete(int id);
+
     }
 }

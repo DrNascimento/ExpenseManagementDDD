@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Services;
+using Application.ViewModel.ExpenseInstallment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Helper;
@@ -34,17 +35,25 @@ namespace WebAPI.Controller
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult Put(int id)
+        public async Task<IActionResult> Put(int id,
+            UpdateExpenseInstallmentViewModel updateExpenseInstallmentViewModel)
         {
-            
-            return OkFind(new { });
+            await _expenseInstallmentAppService.Update(id, updateExpenseInstallmentViewModel);
+            return Ok();
+        }
+
+        [HttpPut("paid/{id:int}")]
+        public async Task<IActionResult> Put(int id)
+        {
+            await _expenseInstallmentAppService.UpdatePaid(id);
+            return Ok();
         }
 
         [HttpDelete("{id:int}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-
-            return OkFind(new { });
+            await _expenseInstallmentAppService.Delete(id);
+            return Ok();
         }
     }
 }

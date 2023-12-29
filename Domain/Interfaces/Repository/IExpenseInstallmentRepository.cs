@@ -12,7 +12,8 @@ namespace Domain.Interfaces.Repository
         Task DeleteByExpenseId(int expenseId);
         IEnumerable<ExpenseInstallment> GetExpenseInstallments(int userId);
         Task<ExpenseInstallment> GetExpenseInstallment(int id, int userId);
-
         bool HasByUserIdAndId(int id, int userId);
+
+        bool HasOneInstallmentByMonth(int exceptId, DateTime dueDate);
     }
 }

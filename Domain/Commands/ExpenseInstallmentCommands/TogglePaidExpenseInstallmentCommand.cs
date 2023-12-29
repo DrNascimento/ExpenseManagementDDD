@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Commands.ExpenseInstallmentCommands
 {
-    public class DeleteExpenseInstallmentCommand : ExpenseInstallmentCommand, IRequest<Unit>
+    public class TogglePaidExpenseInstallmentCommand : ExpenseInstallmentCommand, IRequest<Unit>
     {
-        public DeleteExpenseInstallmentCommand(int id, int userId)
+        public TogglePaidExpenseInstallmentCommand(int id, int userId)
         {
             Id = id;
             UserId = userId;

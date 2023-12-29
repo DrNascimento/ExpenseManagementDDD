@@ -13,5 +13,7 @@ namespace Domain.Interfaces.Repository
 
         IQueryable<Expense> GetExpenses();
 
+        bool HasExpenseByIdAndUser(int id, int userId);
+
     }
 }

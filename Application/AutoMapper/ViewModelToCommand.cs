@@ -1,11 +1,13 @@
 ﻿using Application.ViewModel.Account;
 using Application.ViewModel.Category;
 using Application.ViewModel.Expense;
+using Application.ViewModel.ExpenseInstallment;
 using Application.ViewModel.ExpenseType;
 using Application.ViewModel.User;
 using AutoMapper;
 using Domain.Commands.Category;
 using Domain.Commands.ExpenseCommands;
+using Domain.Commands.ExpenseInstallmentCommands;
 using Domain.Commands.ExpenseTypeCommands;
 using Domain.Commands.UserCommands;
 using Domain.Enums;
@@ -43,7 +45,8 @@ namespace Application.AutoMapper
             CreateMap<UpdateExpenseViewModel, UpdateExpenseCommand>()
                 .ConstructUsing(e => new UpdateExpenseCommand(e.Id, e.Name, e.CategoryId));
 
-            
+            CreateMap<UpdateExpenseInstallmentViewModel, UpdateExpenseInstallmentCommand>()
+                .ConstructUsing(e => new UpdateExpenseInstallmentCommand(e.Id, e.Amount, e.DueDate, e.IsPaid, e.UserId));
 
         }
     }

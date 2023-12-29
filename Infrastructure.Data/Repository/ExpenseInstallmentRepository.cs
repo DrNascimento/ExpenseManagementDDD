@@ -52,6 +52,16 @@ namespace Infrastructure.Data.Repository
                 && e.Expense.UserId == userId);
         }
 
+        public bool HasOneInstallmentByMonth(int exceptId, DateTime dueDate) 
+        {
+            return DbSet.Any(e => 
+                !e.IsDeleted
+                && e.Id != exceptId 
+                && e.DueDate.Year == dueDate.Year
+                && e.DueDate.Month == dueDate.Month
+                && DbSet.First(e1 => e1.Id == exceptId).ExpenseId == e.ExpenseId);                     
+        }
+
         private IQueryable<ExpenseInstallment> GetIncludes() =>
             DbSet
                 .Include(e => e.Expense)

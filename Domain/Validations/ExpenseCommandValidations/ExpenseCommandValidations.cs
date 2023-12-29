@@ -6,17 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Validations.Expense
+namespace Domain.Validations.ExpenseCommandValidations
 {
     public class ExpenseCommandValidations<T> : AbstractValidator<T> where T : ExpenseCommand
     {
-        public ExpenseCommandValidations() 
+        public ExpenseCommandValidations()
         {
-        
+
         }
         public void ValidateId() =>
-    RuleFor(e => e.Id)
-        .NotEmpty();
+            RuleFor(e => e.Id)
+                .NotEmpty();
 
         public void ValidateUserId() =>
             RuleFor(e => e.UserId)

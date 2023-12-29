@@ -20,7 +20,7 @@ namespace Application.ViewModel.ExpenseInstallment
         public DateTime DueDate { get; set; }
 
         [JsonPropertyName("ammount")]
-        public double Ammount { get; set; }
+        public double Amount { get; set; }
 
         [JsonPropertyName("is_paid")]
         public bool IsPaid { get; set; }

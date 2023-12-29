@@ -2,17 +2,20 @@
 using Application.Services;
 using Domain.CommandHandlers.CategoryCommandHandlers;
 using Domain.CommandHandlers.ExpenseCommandHandlers;
+using Domain.CommandHandlers.ExpenseInstallmentCommandHandlers;
 using Domain.CommandHandlers.ExpenseTypeCommandHandlers;
 using Domain.CommandHandlers.UserCommandHandlers;
 using Domain.Commands.Category;
 using Domain.Commands.ExpenseCommands;
+using Domain.Commands.ExpenseInstallmentCommands;
 using Domain.Commands.ExpenseTypeCommands;
 using Domain.Commands.UserCommands;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using Domain.Validations;
 using Domain.Validations.CategoryCommandValidations;
-using Domain.Validations.Expense;
+using Domain.Validations.ExpenseCommandValidations;
+using Domain.Validations.ExpenseInstallmentCommandValidations;
 using Domain.Validations.ExpenseTypeCommandValidations;
 using Domain.Validations.UserCommandValidations;
 using FluentValidation;
@@ -76,17 +79,17 @@ namespace Infrastructure.CrossCutting
             services.AddScoped<IExpenseInstallmentAppService, ExpenseInstallmentAppService>();
 
             // Command
-            //services.AddScoped<IRequestHandler<CreateExpenseCommand, int>, CreateExpenseCommandHandler>();
-            //services.AddScoped<IRequestHandler<UpdateExpenseTypeCommand, Unit>, UpdateExpenseTypeCommandHandler>();
-            //services.AddScoped<IRequestHandler<DeleteExpenseTypeCommand, Unit>, DeleteExpenseTypeCommandHandler>();
+            services.AddScoped<IRequestHandler<UpdateExpenseInstallmentCommand, Unit>, UpdateExpenseInstallmentCommandHandler>();
+            services.AddScoped<IRequestHandler<TogglePaidExpenseInstallmentCommand, Unit>, UpdateExpenseInstallmentCommandHandler>();
+            services.AddScoped<IRequestHandler<DeleteExpenseInstallmentCommand, Unit>, DeleteExpenseInstallmentCommandHandler>();
 
 
             // Repository
             services.AddScoped<IExpenseInstallmentRepository, ExpenseInstallmentRepository>();
 
-            //services.AddScoped<IValidator<CreateExpenseTypeCommand>, CreateExpenseTypeCommandValidator>();
-            //services.AddScoped<IValidator<UpdateExpenseTypeCommand>, UpdateExpenseTypeCommandValidator>();
-            //services.AddScoped<IValidator<DeleteExpenseTypeCommand>, DeleteExpenseTypeCommandValidator>();
+            services.AddScoped<IValidator<UpdateExpenseInstallmentCommand>, UpdateExpenseInstallmentCommandValidator>();
+            services.AddScoped<IValidator<TogglePaidExpenseInstallmentCommand>, TogglePaidExpenseInstallmentCommandValidator>();
+            services.AddScoped<IValidator<DeleteExpenseInstallmentCommand>, DeleteExpenseInstallmentCommandValidator>();
             #endregion
 
             #region ExpenseType
@@ -156,6 +159,10 @@ namespace Infrastructure.CrossCutting
             configuration.AddBehavior<IPipelineBehavior<CreateExpenseCommand, int>, ValidationBehavior<CreateExpenseCommand, int>>();
             configuration.AddBehavior<IPipelineBehavior<UpdateExpenseCommand, Unit>, ValidationBehavior<UpdateExpenseCommand, Unit>>();
             configuration.AddBehavior<IPipelineBehavior<DeleteExpenseCommand, Unit>, ValidationBehavior<DeleteExpenseCommand, Unit>>();
+
+            configuration.AddBehavior<IPipelineBehavior<UpdateExpenseInstallmentCommand, Unit>, ValidationBehavior<UpdateExpenseInstallmentCommand, Unit>>();
+            configuration.AddBehavior<IPipelineBehavior<TogglePaidExpenseInstallmentCommand, Unit>, ValidationBehavior<TogglePaidExpenseInstallmentCommand, Unit>>();
+            configuration.AddBehavior<IPipelineBehavior<DeleteExpenseInstallmentCommand, Unit>, ValidationBehavior<DeleteExpenseInstallmentCommand, Unit>>();
         }
 
     }

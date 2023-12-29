@@ -5,7 +5,7 @@ namespace Infrastructure.CrossCutting.Identity
 {
     public interface IUserContext
     {
-        string UserId { get; }
+        int UserId { get; }
         string UserName { get; }
         string Role { get; }
     }
@@ -19,8 +19,15 @@ namespace Infrastructure.CrossCutting.Identity
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public string UserId
-            => _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        public int UserId
+        {
+            get
+            {
+                string? strId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                _ = int.TryParse(strId, out int id);
+                return id;
+            }
+        }
 
         public string UserName =>
             _httpContextAccessor.HttpContext?.User.Identity?.Name;
