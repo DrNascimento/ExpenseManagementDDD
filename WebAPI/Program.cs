@@ -24,6 +24,15 @@ builder.Services.AddMvc()
         options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseJsonPolicy();
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder => builder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        );
+});
+
 
 
 builder.Services.AddDependencyInjectionConfiguration();
@@ -54,6 +63,7 @@ if (!app.Environment.IsDevelopment())
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors("CorsPolicy");
 
 app.UseEndpoints(endpoints =>
 {
