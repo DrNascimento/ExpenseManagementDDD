@@ -48,16 +48,17 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseSwaggerUI();
-app.UseSwagger(x => x.SerializeAsV2 = true);
-
 app.UseMiddleware<ExpenseManagementMiddleware>();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
     app.UseExceptionHandler("/error");
     app.UseHsts();
+}
+else
+{
+    app.UseSwaggerUI();
+    app.UseSwagger(x => x.SerializeAsV2 = true);
 }
 
 app.UseRouting();
