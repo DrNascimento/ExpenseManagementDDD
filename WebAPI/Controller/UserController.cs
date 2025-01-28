@@ -23,8 +23,8 @@ namespace WebAPI.Controller
         }
 
         [Authorize(Roles = "admin")]
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult> GetById(int id)
+        [HttpGet("{id:Guid}")]
+        public async Task<ActionResult> GetById(Guid id)
         {
             var registeredUser = await _userAppService.GetById(id);
 
@@ -43,12 +43,11 @@ namespace WebAPI.Controller
         [HttpGet("profile")]
         public async Task<ActionResult> GetProfile()
         {
-            var currentUser = Convert.ToInt16(_userContext.UserId);
-            return Ok(await _userAppService.GetById(currentUser));
+            return Ok(await _userAppService.GetById(_userContext.UserId));
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put(int id, [FromBody] UpdateUserViewModel updateUserViewModel)
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> Put(Guid id, [FromBody] UpdateUserViewModel updateUserViewModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace Application.ViewModel.ExpenseInstallment
+namespace Application.ViewModel.ExpenseInstallment;
+
+public class UpdateExpenseInstallmentViewModel
 {
-    public class UpdateExpenseInstallmentViewModel
-    {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
 
-        [JsonPropertyName("amount")]
-        public double Amount { get; set; }
+    [JsonPropertyName("amount")]
+    public double Amount { get; set; }
 
-        [JsonPropertyName("duedate")]
-        public DateTime DueDate { get; set; }
+    [JsonPropertyName("duedate")]
+    public DateTime DueDate { get; set; }
 
-        [JsonPropertyName("is_paid")]
-        public bool IsPaid { get; set; }
+    [JsonPropertyName("is_paid")]
+    public bool IsPaid { get; set; }
 
-        [JsonIgnore]
-        public int UserId { get; set; }
-    }
+    [JsonIgnore]
+    public Guid UserId { get; set; }
 }

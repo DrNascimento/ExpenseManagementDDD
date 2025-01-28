@@ -26,8 +26,8 @@ namespace WebAPI.Controller
             return Ok(expenses);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{id:Guid}")]
+        public async Task<IActionResult> Get(Guid id)
         {
             var expenseTypeViewModel = await _expenseTypeAppService.GetById(id);
             return OkFind(expenseTypeViewModel);
@@ -41,7 +41,7 @@ namespace WebAPI.Controller
                 return BadRequest(ModelState);
 
             var id = await _expenseTypeAppService.Create(expenseTypeViewModel);
-            return Ok(new { id });
+            return Created(Url.Action(nameof(Get), new { id })!, null);
         }
 
         

@@ -9,7 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDbContext<ExpenseManagementContext>(options =>
-    options.UseSqlite(builder.Configuration.GetPathSQLite()));
+{
+    options.UseSqlite(builder.Configuration.GetPathSQLite());
+    options.EnableDetailedErrors();
+    options.EnableSensitiveDataLogging();
+})
+    ;
 builder.Configuration
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.json", true, true)

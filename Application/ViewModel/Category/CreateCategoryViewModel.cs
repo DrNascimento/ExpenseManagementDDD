@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace Application.ViewModel.Category
+namespace Application.ViewModel.Category;
+
+public class CreateCategoryViewModel
 {
-    public class CreateCategoryViewModel
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonIgnore]
-        public int? UserId { get; set; }
-    }
+    [JsonIgnore]
+    public Guid? UserId { get; set; }
 }

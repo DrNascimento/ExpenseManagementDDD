@@ -11,7 +11,7 @@ namespace Application.ViewModel.Expense
     public class UpdateExpenseViewModel
     {
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage ="Name is required")]
         [JsonPropertyName("name")]
@@ -19,6 +19,6 @@ namespace Application.ViewModel.Expense
 
         [Required(ErrorMessage = "Category is required")]
         [JsonPropertyName("category_id")]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
     }
 }

@@ -1,24 +1,18 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.Commands.ExpenseCommands
+namespace Domain.Commands.ExpenseCommands;
+
+public class CreateExpenseCommand : ExpenseCommand, IRequest<Guid>
 {
-    public class CreateExpenseCommand : ExpenseCommand, IRequest<int>
+    public CreateExpenseCommand(Guid userId, string name, Guid expenseTypeid,
+        Guid categoryId, int installments, double installmentAmmount, DateTime installmentDueDate) 
     {
-        public CreateExpenseCommand(int userId, string name, int expenseTypeid,
-            int categoryId, int installments, double installmentAmmount, DateTime installmentDueDate) 
-        {
-            UserId = userId;
-            Name = name;
-            ExpenseTypeId = expenseTypeid;
-            CategoryId = categoryId;
-            Installments = installments;
-            ExpenseInstallmentAmmount = installmentAmmount;
-            ExpenseInstallmentDueDate = installmentDueDate;
-        }
+        UserId = userId;
+        Name = name;
+        ExpenseTypeId = expenseTypeid;
+        CategoryId = categoryId;
+        Installments = installments;
+        ExpenseInstallmentAmmount = installmentAmmount;
+        ExpenseInstallmentDueDate = installmentDueDate;
     }
 }

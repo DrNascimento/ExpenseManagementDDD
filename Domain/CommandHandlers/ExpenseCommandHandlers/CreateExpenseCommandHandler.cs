@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Domain.CommandHandlers.ExpenseCommandHandlers
 {
-    public class CreateExpenseCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateExpenseCommand, int>
+    public class CreateExpenseCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateExpenseCommand, Guid>
     {
         private readonly IExpenseRepository _expenseRepository;
         private readonly IExpenseInstallmentRepository _expenseInstallmentRepository;
@@ -25,7 +25,7 @@ namespace Domain.CommandHandlers.ExpenseCommandHandlers
             _expenseInstallmentRepository = expenseInstallmentRepository;
         }
 
-        public async Task<int> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
         {
 
             try
@@ -57,9 +57,9 @@ namespace Domain.CommandHandlers.ExpenseCommandHandlers
             }
         }
 
-        private void SaveExpenseInstallments(int expenseId, CreateExpenseCommand createExpenseCommand)
+        private void SaveExpenseInstallments(Guid expenseId, CreateExpenseCommand createExpenseCommand)
         {
-            for (var i = 0; i < createExpenseCommand.Installments;  i++)
+            Parallel.For(0, createExpenseCommand.Installments, (i) =>
             {
                 var expenseInstallment = new ExpenseInstallment
                 {
@@ -71,7 +71,7 @@ namespace Domain.CommandHandlers.ExpenseCommandHandlers
                 };
 
                 _expenseInstallmentRepository.Add(expenseInstallment);
-            }
+            });
 
             _expenseInstallmentRepository.SaveChanges();
         }

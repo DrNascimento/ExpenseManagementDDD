@@ -19,9 +19,9 @@ namespace Infrastructure.Data.Migrations.SQLite
 
             modelBuilder.Entity("Domain.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
@@ -36,8 +36,8 @@ namespace Infrastructure.Data.Migrations.SQLite
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -48,18 +48,18 @@ namespace Infrastructure.Data.Migrations.SQLite
 
             modelBuilder.Entity("Domain.Entities.Expense", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ExpenseTypeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("ExpenseTypeId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Installments")
                         .HasColumnType("INTEGER");
@@ -74,8 +74,8 @@ namespace Infrastructure.Data.Migrations.SQLite
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -90,9 +90,9 @@ namespace Infrastructure.Data.Migrations.SQLite
 
             modelBuilder.Entity("Domain.Entities.ExpenseInstallment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("Amount")
                         .HasColumnType("REAL");
@@ -103,8 +103,8 @@ namespace Infrastructure.Data.Migrations.SQLite
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ExpenseId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("ExpenseId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("InstallmentNumber")
                         .HasColumnType("INTEGER");
@@ -127,9 +127,9 @@ namespace Infrastructure.Data.Migrations.SQLite
 
             modelBuilder.Entity("Domain.Entities.ExpenseType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
@@ -155,9 +155,9 @@ namespace Infrastructure.Data.Migrations.SQLite
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
@@ -232,12 +232,17 @@ namespace Infrastructure.Data.Migrations.SQLite
             modelBuilder.Entity("Domain.Entities.ExpenseInstallment", b =>
                 {
                     b.HasOne("Domain.Entities.Expense", "Expense")
-                        .WithMany()
+                        .WithMany("ExpenseInstallments")
                         .HasForeignKey("ExpenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Expense");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Expense", b =>
+                {
+                    b.Navigation("ExpenseInstallments");
                 });
 #pragma warning restore 612, 618
         }

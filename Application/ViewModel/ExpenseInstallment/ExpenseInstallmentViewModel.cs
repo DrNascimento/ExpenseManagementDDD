@@ -8,7 +8,7 @@ namespace Application.ViewModel.ExpenseInstallment
     public class ExpenseInstallmentViewModel
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [JsonPropertyName("expense")]
         public ExpenseToInstallment Expense { get; set; }
@@ -29,7 +29,7 @@ namespace Application.ViewModel.ExpenseInstallment
     public class ExpenseToInstallment
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }

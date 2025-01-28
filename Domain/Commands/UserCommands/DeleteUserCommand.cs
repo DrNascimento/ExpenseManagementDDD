@@ -1,17 +1,11 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.Commands.UserCommands
+namespace Domain.Commands.UserCommands;
+
+public class DeleteUserCommand : UserCommand, IRequest<Unit>
 {
-    public class DeleteUserCommand : UserCommand, IRequest<Unit>
+    public DeleteUserCommand(Guid id) 
     {
-        public DeleteUserCommand(int id) 
-        {
-            Id = id;
-        }
+        Id = id;
     }
 }

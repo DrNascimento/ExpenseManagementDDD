@@ -9,14 +9,14 @@ namespace Application.Interfaces
 {
     public interface IExpenseAppService : IDisposable
     {
-        Task<int> Create(CreateExpenseViewModel createExpenseViewModel);
+        Task<Guid> Create(CreateExpenseViewModel createExpenseViewModel);
 
-        ExpenseViewModel Get(int id);
+        ExpenseViewModel Get(Guid Id);
 
         IEnumerable<ExpenseViewModel> GetAll();
 
-        Task Update(int id, UpdateExpenseViewModel updateExpenseViewModel);
+        Task Update(Guid Id, UpdateExpenseViewModel updateExpenseViewModel);
 
-        Task Delete(int id);
+        Task Delete(Guid Id);
     }
 }

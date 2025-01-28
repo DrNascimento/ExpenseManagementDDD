@@ -6,10 +6,10 @@ namespace Application.Interfaces
     public interface IUserAppService : IDisposable
     {
 
-        Task<UserViewModel> GetById(int id);
+        Task<UserViewModel> GetById(Guid id);
 
         IEnumerable<UserViewModel> GetAll();
 
-        Task Update(int id, UpdateUserViewModel updateUserViewModel);
+        Task Update(Guid Id, UpdateUserViewModel updateUserViewModel);
     }
 }

@@ -12,7 +12,7 @@ namespace Domain.Entities
         public Expense Expense { get; set; }
 
         [Required]
-        public int ExpenseId { get; set; }
+        public Guid ExpenseId { get; set; }
 
         [Required]
         public int InstallmentNumber { get; set; }

@@ -17,3 +17,4 @@ namespace Domain.Validations.ExpenseCommandValidations
         }
     }
 }
+    

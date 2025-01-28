@@ -2,15 +2,10 @@
 using Domain.Interfaces.Repository;
 using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.Data.Repository
-{
-    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : EntityBase
+namespace Infrastructure.Data.Repository;
+
+public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : EntityBase
     {
         protected readonly ExpenseManagementContext Db;
         protected readonly DbSet<TEntity> DbSet;
@@ -49,13 +44,13 @@ namespace Infrastructure.Data.Repository
             Db.Update(entity);
         }
 
-        public virtual async Task<TEntity> GetById(int id)
+        public virtual async Task<TEntity> GetById(Guid id)
         {
             return await DbSet
                 .FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
         }
 
-        public virtual async Task<TEntity> GetByIdIncludingDeleted(int id)
+        public virtual async Task<TEntity> GetByIdIncludingDeleted(Guid id)
         {
             return await DbSet.FindAsync(id);
         }
@@ -65,4 +60,4 @@ namespace Infrastructure.Data.Repository
             return DbSet.AsNoTracking().Where(x => !x.IsDeleted);
         }
     }
-  }
+  

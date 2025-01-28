@@ -1,11 +1,10 @@
-﻿namespace Domain.Commands.ExpenseTypeCommands
+﻿namespace Domain.Commands.ExpenseTypeCommands;
+
+public class ExpenseTypeCommand
 {
-    public class ExpenseTypeCommand
-    {
-        public int Id { get; set; }
+    public Guid Id { get; set; }
 
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public bool IsFixed { get; set; }
-    }
+    public bool IsFixed { get; set; }
 }

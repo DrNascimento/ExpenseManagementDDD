@@ -3,38 +3,32 @@ using Domain.Entities;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.CommandHandlers.CategoryCommandHandlers
+namespace Domain.CommandHandlers.CategoryCommandHandlers;
+
+public class CreateCategoryCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateCategoryCommand, Guid>
 {
-    public class CreateCategoryCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateCategoryCommand, int>
+    private readonly ICategoryRepository _categoryRepository;
+
+    public CreateCategoryCommandHandler(IUnitOfWork unitOfWork,
+        ICategoryRepository categoryRepository) 
+        : base(unitOfWork)
     {
-        private readonly ICategoryRepository _categoryRepository;
+        _categoryRepository = categoryRepository;
+    }
 
-        public CreateCategoryCommandHandler(IUnitOfWork unitOfWork,
-            ICategoryRepository categoryRepository) 
-            : base(unitOfWork)
+    public async Task<Guid> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var category = new Category
         {
-            _categoryRepository = categoryRepository;
-        }
+            Name = request.Name,
+            UserId = request.UserId,
+        };
 
-        public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
-        {
-            var category = new Category
-            {
-                Name = request.Name,
-                UserId = request.UserId,
-            };
+        _categoryRepository.Add(category);
 
-            _categoryRepository.Add(category);
+        await _uow.CommitAsync();
 
-            await _uow.CommitAsync();
-
-            return category.Id;
-        }
+        return category.Id;
     }
 }

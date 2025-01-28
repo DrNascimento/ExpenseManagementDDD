@@ -10,7 +10,7 @@ namespace Application.ViewModel.Category
     public class CategoryViewModel
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }

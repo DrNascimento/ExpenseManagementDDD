@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Domain.Commands.UserCommands
 {
-    public class CreateUserCommand : UserCommand, IRequest<int>
+    public class CreateUserCommand : UserCommand, IRequest<Guid>
     {
         public CreateUserCommand(string name, string email, string password, UserTypeEnum userTypeEnum)
         {

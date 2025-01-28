@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Domain.CommandHandlers.ExpenseTypeCommandHandlers
 {
-    public class CreateExpenseTypeCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateExpenseTypeCommand, int>
+    public class CreateExpenseTypeCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateExpenseTypeCommand, Guid>
     {
         private readonly IExpenseTypeRepository _expenseTypeRepository;
 
@@ -23,7 +23,7 @@ namespace Domain.CommandHandlers.ExpenseTypeCommandHandlers
             _expenseTypeRepository = expenseTypeRepository;
         }
 
-        public async Task<int> Handle(CreateExpenseTypeCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateExpenseTypeCommand request, CancellationToken cancellationToken)
         {
             var expenseType = new ExpenseType
             {

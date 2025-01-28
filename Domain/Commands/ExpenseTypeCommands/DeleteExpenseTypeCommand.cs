@@ -1,12 +1,11 @@
 ﻿using MediatR;
 
-namespace Domain.Commands.ExpenseTypeCommands
+namespace Domain.Commands.ExpenseTypeCommands;
+
+public class DeleteExpenseTypeCommand : ExpenseTypeCommand, IRequest<Unit>
 {
-    public class DeleteExpenseTypeCommand : ExpenseTypeCommand, IRequest<Unit>
+    public DeleteExpenseTypeCommand(Guid id)
     {
-        public DeleteExpenseTypeCommand(int id)
-        {
-            Id = id;
-        }
+        Id = id;
     }
 }

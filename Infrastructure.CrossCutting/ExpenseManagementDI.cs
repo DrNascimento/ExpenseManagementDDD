@@ -44,7 +44,7 @@ namespace Infrastructure.CrossCutting
             services.AddScoped<ICategoryAppService, CategoryAppService>();
 
             // Command
-            services.AddScoped<IRequestHandler<CreateCategoryCommand, int>, CreateCategoryCommandHandler>();
+            services.AddScoped<IRequestHandler<CreateCategoryCommand, Guid>, CreateCategoryCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateCategoryCommand, Unit>, UpdateCategoryCommandHandler>();
             services.AddScoped<IRequestHandler<DeleteCategoryCommand, Unit>, DeleteCategoryCommandHandler>();
 
@@ -61,7 +61,7 @@ namespace Infrastructure.CrossCutting
             services.AddScoped<IExpenseAppService, ExpenseAppService>();
 
             // Command
-            services.AddScoped<IRequestHandler<CreateExpenseCommand, int>, CreateExpenseCommandHandler>();
+            services.AddScoped<IRequestHandler<CreateExpenseCommand, Guid>, CreateExpenseCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateExpenseCommand, Unit>, UpdateExpenseCommandHandler>();
             services.AddScoped<IRequestHandler<DeleteExpenseCommand, Unit>, DeleteExpenseCommandHandler>();
 
@@ -98,7 +98,7 @@ namespace Infrastructure.CrossCutting
             services.AddScoped<IExpenseTypeAppService, ExpenseTypeAppService>();
 
             // Command
-            services.AddScoped<IRequestHandler<CreateExpenseTypeCommand, int>, CreateExpenseTypeCommandHandler>();
+            services.AddScoped<IRequestHandler<CreateExpenseTypeCommand, Guid>, CreateExpenseTypeCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateExpenseTypeCommand, Unit>, UpdateExpenseTypeCommandHandler>();
             services.AddScoped<IRequestHandler<DeleteExpenseTypeCommand, Unit>, DeleteExpenseTypeCommandHandler>();
 
@@ -126,7 +126,7 @@ namespace Infrastructure.CrossCutting
             services.AddScoped<IUserAppService, UserAppService>();
 
             // Command
-            services.AddScoped<IRequestHandler<CreateUserCommand, int>, CreateUserCommandHandler>();
+            services.AddScoped<IRequestHandler<CreateUserCommand, Guid>, CreateUserCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateUserCommand, Unit>, UpdateUserCommandHandler>();
             services.AddScoped<IRequestHandler<DeleteUserCommand, Unit>, DeleteUserCommandHandler>();
 
@@ -144,19 +144,19 @@ namespace Infrastructure.CrossCutting
         public static void RegisterBehaviorsValidators(this MediatRServiceConfiguration configuration)
         {
             // user
-            configuration.AddBehavior<IPipelineBehavior<CreateUserCommand, int>, ValidationBehavior<CreateUserCommand, int>>();
+            configuration.AddBehavior<IPipelineBehavior<CreateUserCommand, Guid>, ValidationBehavior<CreateUserCommand, Guid>>();
             configuration.AddBehavior<IPipelineBehavior<UpdateUserCommand, Unit>, ValidationBehavior<UpdateUserCommand, Unit>>();
             configuration.AddBehavior<IPipelineBehavior<DeleteUserCommand, Unit>, ValidationBehavior<DeleteUserCommand, Unit>>();
 
-            configuration.AddBehavior<IPipelineBehavior<CreateExpenseTypeCommand, int>, ValidationBehavior<CreateExpenseTypeCommand, int>>();
+            configuration.AddBehavior<IPipelineBehavior<CreateExpenseTypeCommand, Guid>, ValidationBehavior<CreateExpenseTypeCommand, Guid>>();
             configuration.AddBehavior<IPipelineBehavior<UpdateExpenseTypeCommand, Unit>, ValidationBehavior<UpdateExpenseTypeCommand, Unit>>();
             configuration.AddBehavior<IPipelineBehavior<DeleteExpenseTypeCommand, Unit>, ValidationBehavior<DeleteExpenseTypeCommand, Unit>>();
 
-            configuration.AddBehavior<IPipelineBehavior<CreateCategoryCommand, int>, ValidationBehavior<CreateCategoryCommand, int>>();
+            configuration.AddBehavior<IPipelineBehavior<CreateCategoryCommand, Guid>, ValidationBehavior<CreateCategoryCommand, Guid>>();
             configuration.AddBehavior<IPipelineBehavior<UpdateCategoryCommand, Unit>, ValidationBehavior<UpdateCategoryCommand, Unit>>();
             configuration.AddBehavior<IPipelineBehavior<DeleteCategoryCommand, Unit>, ValidationBehavior<DeleteCategoryCommand, Unit>>();
 
-            configuration.AddBehavior<IPipelineBehavior<CreateExpenseCommand, int>, ValidationBehavior<CreateExpenseCommand, int>>();
+            configuration.AddBehavior<IPipelineBehavior<CreateExpenseCommand, Guid>, ValidationBehavior<CreateExpenseCommand, Guid>>();
             configuration.AddBehavior<IPipelineBehavior<UpdateExpenseCommand, Unit>, ValidationBehavior<UpdateExpenseCommand, Unit>>();
             configuration.AddBehavior<IPipelineBehavior<DeleteExpenseCommand, Unit>, ValidationBehavior<DeleteExpenseCommand, Unit>>();
 

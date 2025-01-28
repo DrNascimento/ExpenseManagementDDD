@@ -11,11 +11,6 @@ using Domain.Commands.ExpenseInstallmentCommands;
 using Domain.Commands.ExpenseTypeCommands;
 using Domain.Commands.UserCommands;
 using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.AutoMapper
 {
@@ -40,7 +35,7 @@ namespace Application.AutoMapper
 
             CreateMap<CreateExpenseViewModel, CreateExpenseCommand>()
                 .ConstructUsing(e => new CreateExpenseCommand(e.UserId, e.Name, e.ExpenseTypeId, e.CategoryId,
-                    e.Installments, e.ExpenseInstallmentAmmount, e.ExpenseInstallmentDueDate));
+                    e.Installments, e.ExpenseInstallmentAmount, e.ExpenseInstallmentDueDate));
 
             CreateMap<UpdateExpenseViewModel, UpdateExpenseCommand>()
                 .ConstructUsing(e => new UpdateExpenseCommand(e.Id, e.Name, e.CategoryId));

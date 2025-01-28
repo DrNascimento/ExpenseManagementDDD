@@ -1,24 +1,20 @@
 ﻿using Application.ViewModel.Category;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.Interfaces
+namespace Application.Interfaces;
+
+public interface ICategoryAppService : IDisposable
 {
-    public interface ICategoryAppService : IDisposable
-    {
-        Task<CategoryViewModel> Get(int id);
+    Task<CategoryViewModel> Get(Guid id);
 
-        IEnumerable<CategoryViewModel> GetAll();
+    IEnumerable<CategoryViewModel> GetAll();
 
-        Task<int> CreateUniversal(CreateCategoryViewModel createCategoryViewModel);
+    Task<Guid> CreateUniversal(CreateCategoryViewModel createCategoryViewModel);
 
-        Task<int> CreateByUser(CreateCategoryViewModel createCategoryViewModel);
+    Task<Guid> CreateByUser(CreateCategoryViewModel createCategoryViewModel);
 
-        Task Update(int id, UpdateCategoryViewModel updateCategoryViewModel);
+    Task Update(Guid id, UpdateCategoryViewModel updateCategoryViewModel);
 
-        Task Delete(int id);
-    }
+    Task Delete(Guid id);
+
+    CategoriesSummaryViewModel Summary(DateTime start, DateTime end);
 }

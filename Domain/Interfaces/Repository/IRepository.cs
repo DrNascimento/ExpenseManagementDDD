@@ -18,9 +18,9 @@ namespace Domain.Interfaces.Repository
 
         int SaveChanges();
 
-        Task<TEntity> GetById(int id);
+        Task<TEntity> GetById(Guid id);
 
-        Task<TEntity> GetByIdIncludingDeleted(int id);
+        Task<TEntity> GetByIdIncludingDeleted(Guid id);
 
         IQueryable<TEntity> GetAll();
     }

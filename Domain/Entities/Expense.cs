@@ -14,7 +14,7 @@ namespace Domain.Entities
         public User User { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -22,12 +22,12 @@ namespace Domain.Entities
         public ExpenseType ExpenseType { get; set; }
 
         [Required]
-        public int ExpenseTypeId { get;set; }
+        public Guid ExpenseTypeId { get;set; }
 
         public Category Category { get; set; }
 
         [Required]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         [Required]
         public int Installments { get; set; }

@@ -1,13 +1,12 @@
 ﻿using Application.ViewModel.ExpenseType;
 
-namespace Application.Interfaces
+namespace Application.Interfaces;
+
+public interface IExpenseTypeAppService : IDisposable
 {
-    public interface IExpenseTypeAppService : IDisposable
-    {
-        Task<int> Create(ExpenseTypeViewModel expenseTypeViewModel);
+    Task<Guid> Create(ExpenseTypeViewModel expenseTypeViewModel);
 
-        Task<ExpenseTypeViewModel> GetById(int id);
+    Task<ExpenseTypeViewModel> GetById(Guid id);
 
-        IEnumerable<ExpenseTypeViewModel> GetAll();
-    }
+    IEnumerable<ExpenseTypeViewModel> GetAll();
 }

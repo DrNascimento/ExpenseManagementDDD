@@ -1,18 +1,12 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.Commands.ExpenseTypeCommands
+namespace Domain.Commands.ExpenseTypeCommands;
+
+public class UpdateExpenseTypeCommand : ExpenseTypeCommand, IRequest<Unit>
 {
-    public class UpdateExpenseTypeCommand : ExpenseTypeCommand, IRequest<Unit>
+    public UpdateExpenseTypeCommand(Guid id, string name) 
     {
-        public UpdateExpenseTypeCommand(int id, string name) 
-        {
-            Id = id;
-            Name = name;
-        }
+        Id = id;
+        Name = name;
     }
 }

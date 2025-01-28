@@ -1,17 +1,11 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.Commands.ExpenseCommands
+namespace Domain.Commands.ExpenseCommands;
+
+public class DeleteExpenseCommand : ExpenseCommand, IRequest<Unit>
 {
-    public class DeleteExpenseCommand : ExpenseCommand, IRequest<Unit>
-    {
-        public DeleteExpenseCommand(int id) 
-        { 
-            Id = id;
-        }
+    public DeleteExpenseCommand(Guid id) 
+    { 
+        Id = id;
     }
 }

@@ -6,46 +6,45 @@ using Domain.Notifications.UserNotifications;
 using Infrastructure.CrossCutting.Identity;
 using MediatR;
 
-namespace Domain.CommandHandlers.UserCommandHandlers
+namespace Domain.CommandHandlers.UserCommandHandlers;
+
+public class CreateUserCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateUserCommand, Guid>
 {
-    public class CreateUserCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateUserCommand, int>
+    private readonly IMediator _mediator;
+    private readonly IUserRepository _userRepository;
+
+    public CreateUserCommandHandler(IUnitOfWork uow,
+        IMediator mediator,
+        IUserRepository userRepository)
+        : base(uow)
     {
-        private readonly IMediator _mediator;
-        private readonly IUserRepository _userRepository;
+        _mediator = mediator;
+        _userRepository = userRepository;
+    }
 
-        public CreateUserCommandHandler(IUnitOfWork uow,
-            IMediator mediator,
-            IUserRepository userRepository)
-            : base(uow)
+    public async Task<Guid> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+    {
+        var user = new User
         {
-            _mediator = mediator;
-            _userRepository = userRepository;
-        }
+            Name = command.Name,
+            Email = command.Email,
+            Password = BCryptHash.HashPassword(command.Password),
+            UserTypeEnum = command.UserTypeEnum
+        };
 
-        public async Task<int> Handle(CreateUserCommand command, CancellationToken cancellationToken)
-        {
-            var user = new User
+        _userRepository.Add(user);
+
+        await _uow.CommitAsync();
+
+        await _mediator.Publish(new CreatedUserNotification
             {
-                Name = command.Name,
-                Email = command.Email,
-                Password = BCryptHash.HashPassword(command.Password),
-                UserTypeEnum = command.UserTypeEnum
-            };
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                Password = user.Password,
+                UserTypeEnum = user.UserTypeEnum
+            }, cancellationToken);
 
-            _userRepository.Add(user);
-
-            await _uow.CommitAsync();
-
-            await _mediator.Publish(new CreatedUserNotification
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    Name = user.Name,
-                    Password = user.Password,
-                    UserTypeEnum = user.UserTypeEnum
-                }, cancellationToken);
-
-            return user.Id;
-        }
+        return user.Id;
     }
 }

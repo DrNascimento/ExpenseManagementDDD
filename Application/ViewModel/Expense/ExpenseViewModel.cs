@@ -1,5 +1,4 @@
 ﻿using Application.ViewModel.Category;
-using Application.ViewModel.ExpenseInstallment;
 using Application.ViewModel.ExpenseType;
 using System.Text.Json.Serialization;
 
@@ -8,7 +7,7 @@ namespace Application.ViewModel.Expense
     public class ExpenseViewModel
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
@@ -27,7 +26,7 @@ namespace Application.ViewModel.Expense
     public class InstallmentViewModel
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [JsonPropertyName("installment_number")]
         public int InstallmentNumber { get; set; }
@@ -35,8 +34,8 @@ namespace Application.ViewModel.Expense
         [JsonPropertyName("duedate")]
         public DateTime DueDate { get; set; }
 
-        [JsonPropertyName("ammount")]
-        public double Ammount { get; set; }
+        [JsonPropertyName("amount")]
+        public double Amount { get; set; }
 
         [JsonPropertyName("is_paid")]
         public bool IsPaid { get; set; }

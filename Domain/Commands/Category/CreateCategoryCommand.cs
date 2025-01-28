@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Commands.Category
 {
-    public class CreateCategoryCommand : CategoryCommand, IRequest<int>
+    public class CreateCategoryCommand : CategoryCommand, IRequest<Guid>
     {
-        public CreateCategoryCommand(string name, int? userId) 
+        public CreateCategoryCommand(string name, Guid? userId) 
         {
             Name = name;
             UserId = userId;
