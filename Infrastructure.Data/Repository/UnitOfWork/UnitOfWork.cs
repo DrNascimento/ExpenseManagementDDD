@@ -13,11 +13,11 @@ namespace Infrastructure.Data.Repository.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ExpanseManagementContext _context;
+        private readonly ExpenseManagementContext _context;
 
         private IDbContextTransaction _transaction;
 
-        public UnitOfWork(ExpanseManagementContext context)
+        public UnitOfWork(ExpenseManagementContext context)
         {
             _context = context;
         }

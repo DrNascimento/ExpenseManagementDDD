@@ -1,26 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace Infrastructure.CrossCutting.Models
+namespace Infrastructure.CrossCutting.Models;
+
+public class ErrorResponse
 {
-    public class ValidationFailureResponse
+    public ErrorResponse(string message)
     {
-        [JsonPropertyName("error")]
-        public bool Error { get; set; } = true;
+        Errors = new List<ErrorMessageResponse> { new ErrorMessageResponse(message) };
+    }
 
-        [JsonPropertyName("errors")]
-        public IEnumerable<ValidationFailure> Errors { get; set; } = new List<ValidationFailure>();
+    public ErrorResponse()
+    {
 
     }
 
-    public class ValidationFailure
+    [JsonPropertyName("error")]
+    public bool Error { get; set; } = true;
+
+    [JsonPropertyName("errors")]
+    public IEnumerable<ErrorMessageResponse> Errors { get; set; } = new List<ErrorMessageResponse>();
+
+}
+
+public class ErrorMessageResponse
+{
+    public ErrorMessageResponse(string message)
+    {
+        Message = message;
+    }
+
+    public ErrorMessageResponse()
     {
 
-        [JsonPropertyName("message")]
-        public string ErrorMessage { get; set; }
     }
+
+    [JsonPropertyName("message")]
+    public string Message { get; set; }
 }

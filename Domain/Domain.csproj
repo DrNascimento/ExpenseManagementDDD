@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+    <None Remove="View\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,4 +22,7 @@
     <ProjectReference Include="..\Infrastructure.CrossCutting.Identity\Infrastructure.CrossCutting.Identity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="View\" />
+  </ItemGroup>
 </Project>

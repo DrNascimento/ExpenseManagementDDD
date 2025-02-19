@@ -1,32 +1,38 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace Infrastructure.CrossCutting.Identity
+namespace Infrastructure.CrossCutting.Identity;
+
+public interface IUserContext
 {
-    public interface IUserContext
+    Guid UserId { get; }
+    string UserName { get; }
+    string Role { get; }
+}
+
+public class UserContext : IUserContext
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public UserContext(IHttpContextAccessor httpContextAccessor)
     {
-        string UserId { get; }
-        string UserName { get; }
-        string Role { get; }
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    public class UserContext : IUserContext
+    public Guid UserId
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public UserContext(IHttpContextAccessor httpContextAccessor)
+        get
         {
-            _httpContextAccessor = httpContextAccessor;
+            string? strId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _ = Guid.TryParse(strId, out Guid id);
+            return id;
         }
-
-        public string UserId
-            => _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        public string UserName =>
-            _httpContextAccessor.HttpContext?.User.Identity?.Name;
-
-        public string Role =>
-            _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value;
-
     }
+
+    public string UserName =>
+        _httpContextAccessor.HttpContext?.User.Identity?.Name;
+
+    public string Role =>
+        _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value;
+
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.ViewModel.User;
 using Infrastructure.CrossCutting.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace WebAPI.Controller
 {
     [Authorize]
     [ApiController]
-    [Route("api/user")]
+    [Route("api/users")]
     public class UserController : ApiController
     {
         private readonly IUserAppService _userAppService;
@@ -22,8 +23,8 @@ namespace WebAPI.Controller
         }
 
         [Authorize(Roles = "admin")]
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult> GetById(int id)
+        [HttpGet("{id:Guid}")]
+        public async Task<ActionResult> GetById(Guid id)
         {
             var registeredUser = await _userAppService.GetById(id);
 
@@ -32,7 +33,7 @@ namespace WebAPI.Controller
 
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public ActionResult GetAll ()
+        public ActionResult GetAll()
         {
             var users = _userAppService.GetAll();
 
@@ -42,8 +43,18 @@ namespace WebAPI.Controller
         [HttpGet("profile")]
         public async Task<ActionResult> GetProfile()
         {
-            var currentUser = Convert.ToInt16(_userContext.UserId);
-            return Ok(await _userAppService.GetById(currentUser));
+            return Ok(await _userAppService.GetById(_userContext.UserId));
+        }
+
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> Put(Guid id, [FromBody] UpdateUserViewModel updateUserViewModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _userAppService.Update(id, updateUserViewModel);
+
+            return Ok();
         }
     }
 }
