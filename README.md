@@ -10,17 +10,16 @@
 Technologies used in the project:
 
 *   C#
-*   .NET 6
+*   .NET 8
   
 <h2>🧐 Features</h2>
 
 Here're some of the project's best features:
 
-*   Your expanses
-*   Categories
-*   Chart
-*   Reminders
-*   Calendar Reminder
+*   Your expanses: create, update and manage your expenses
+*   Categories: categorize your exepenses
+*   Chart: view your payments in a delicious pizza chart
+*   Reminders: you'll receive reminders about expenses duedate
 
 <h2>✍️ Tasks</h2>
 
@@ -30,11 +29,12 @@ Todo list:
 - [x] API configs
 - [x] Sign Up
 - [x] Encrypt passwords using salt Bcrypt
-- [x] Sig In
+- [x] Sig In 
 - [x] Management exceptions and errors
 - [x] Expanse types
 - [x] Expanse Categories
-- [ ] Expanse
+- [x] Expanse
+- [x] View expenses categorically 🆕
+- [x] Your data safer with uuid 🆕
 - [ ] Expanse reminders
 - [ ] Expanse charts
-  
