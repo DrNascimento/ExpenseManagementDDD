@@ -29,14 +29,14 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
             .OrderBy(c => c.Name);
     }
 
-    public SummaryCategoriesView Summary(DateTime start, DateTime end, Guid userId)
+    public async Task<SummaryCategoriesView> Summary(DateTime start, DateTime end, Guid userId)
     {
 
         var usersExpenses =  Db.ExpenseInstallments.Include(x => x.Expense)
             .Where(x => x.Expense.UserId == userId && x.DueDate >= start && x.DueDate <= end && !x.IsDeleted).
             Select(x => new { x.Expense.Category, x.Amount});
 
-        double sumExpenses = usersExpenses.Sum(f => f.Amount);
+        double sumExpenses = await usersExpenses.SumAsync(f => f.Amount);
 
         return new SummaryCategoriesView
         {

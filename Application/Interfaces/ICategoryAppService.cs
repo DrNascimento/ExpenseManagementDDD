@@ -16,5 +16,5 @@ public interface ICategoryAppService : IDisposable
 
     Task Delete(Guid id);
 
-    CategoriesSummaryViewModel Summary(DateTime start, DateTime end);
+    Task<CategoriesSummaryViewModel> Summary(DateTime start, DateTime end);
 }

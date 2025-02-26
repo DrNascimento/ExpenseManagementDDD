@@ -3,77 +3,69 @@ using Domain.Entities;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using MediatR;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.CommandHandlers.ExpenseCommandHandlers
+namespace Domain.CommandHandlers.ExpenseCommandHandlers;
+
+public class CreateExpenseCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateExpenseCommand, Guid>
 {
-    public class CreateExpenseCommandHandler : UnitOfWorkCommandHandler, IRequestHandler<CreateExpenseCommand, Guid>
+    private readonly IExpenseRepository _expenseRepository;
+    private readonly IExpenseInstallmentRepository _expenseInstallmentRepository;
+
+    public CreateExpenseCommandHandler(IUnitOfWork unitOfWork,
+        IExpenseRepository expenseRepository,
+        IExpenseInstallmentRepository expenseInstallmentRepository) : base(unitOfWork)
     {
-        private readonly IExpenseRepository _expenseRepository;
-        private readonly IExpenseInstallmentRepository _expenseInstallmentRepository;
+        _expenseRepository = expenseRepository;
+        _expenseInstallmentRepository = expenseInstallmentRepository;
+    }
 
-        public CreateExpenseCommandHandler(IUnitOfWork unitOfWork,
-            IExpenseRepository expenseRepository,
-            IExpenseInstallmentRepository expenseInstallmentRepository) : base(unitOfWork)
+    public async Task<Guid> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
+    {
+        try
         {
-            _expenseRepository = expenseRepository;
-            _expenseInstallmentRepository = expenseInstallmentRepository;
+            var expense = new Expense
+            {
+                UserId = request.UserId,
+                Name = request.Name,
+                ExpenseTypeId = request.ExpenseTypeId,
+                CategoryId = request.CategoryId,
+                Installments = request.Installments
+            };
+
+            await _uow.BeginTransactionAsync(cancellationToken);
+
+            _expenseRepository.Add(expense);
+            _expenseRepository.SaveChanges();
+
+            await SaveExpenseInstallmentsAsync(expense.Id, request);
+
+            await _uow.CommitTransactionAsync(cancellationToken);
+
+            return expense.Id;
         }
-
-        public async Task<Guid> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
+        catch
         {
-
-            try
-            {
-                var expense = new Expense
-                {
-                    UserId = request.UserId,
-                    Name = request.Name,
-                    ExpenseTypeId = request.ExpenseTypeId,
-                    CategoryId = request.CategoryId,
-                    Installments = request.Installments
-                };
-
-                await _uow.BeginTransactionAsync(cancellationToken);
-
-                _expenseRepository.Add(expense);
-                _expenseRepository.SaveChanges();
-
-                SaveExpenseInstallments(expense.Id, request);
-
-                await _uow.CommitTransactionAsync(cancellationToken);
-
-                return expense.Id;
-            }
-            catch (Exception)
-            {
-                await _uow.RollbackTransactionAsync(cancellationToken);
-                throw;  
-            }
+            await _uow.RollbackTransactionAsync(cancellationToken);
+            throw;
         }
+    }
 
-        private void SaveExpenseInstallments(Guid expenseId, CreateExpenseCommand createExpenseCommand)
-        {
-            Parallel.For(0, createExpenseCommand.Installments, (i) =>
+    private async Task SaveExpenseInstallmentsAsync(Guid expenseId, CreateExpenseCommand createExpenseCommand)
+    {
+        List<ExpenseInstallment> expenseInstallments = [];
+
+        for (int i = 0; i < createExpenseCommand.Installments; i++)
+            expenseInstallments.Add(new ExpenseInstallment
             {
-                var expenseInstallment = new ExpenseInstallment
-                {
-                    ExpenseId = expenseId,
-                    InstallmentNumber = i + 1,
-                    Amount = createExpenseCommand.ExpenseInstallmentAmmount,
-                    DueDate = createExpenseCommand.ExpenseInstallmentDueDate.AddMonths(i),
-                    IsPaid = false,
-                };
-
-                _expenseInstallmentRepository.Add(expenseInstallment);
+                ExpenseId = expenseId,
+                InstallmentNumber = i + 1,
+                Amount = createExpenseCommand.ExpenseInstallmentAmmount,
+                DueDate = createExpenseCommand.ExpenseInstallmentDueDate.AddMonths(i),
+                IsPaid = false,
             });
 
-            _expenseInstallmentRepository.SaveChanges();
-        }
+        await _expenseInstallmentRepository.Add(expenseInstallments);
+
+        _expenseInstallmentRepository.SaveChanges();
     }
 }

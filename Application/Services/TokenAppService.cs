@@ -9,15 +9,10 @@ using System.Text;
 
 namespace Application.Services
 {
-    public class TokenAppService : ITokenAppService
+    public class TokenAppService(IOptions<JwtSettings> options) : ITokenAppService
     {
-        private readonly JwtSettings _jwtSettings;
+        private readonly JwtSettings _jwtSettings = options.Value;
         private bool disposedValue;
-
-        public TokenAppService(IOptions<JwtSettings> options) 
-        {
-            _jwtSettings = options.Value;    
-        }
 
         public string GenerateToken(User user)
         {

@@ -9,27 +9,22 @@ namespace WebAPI.Controller;
 [Authorize]
 [ApiController]
 [Route("api/expenses-installments")]
-public class ExpenseInstallmentController : ApiController
+public class ExpenseInstallmentController(IExpenseInstallmentAppService expenseInstallmentAppService) : ApiController
 {
-    private readonly IExpenseInstallmentAppService _expenseInstallmentAppService;
-
-    public ExpenseInstallmentController(IExpenseInstallmentAppService expenseInstallmentAppService)
-    {
-        _expenseInstallmentAppService = expenseInstallmentAppService;
-    }
+    private readonly IExpenseInstallmentAppService _expenseInstallmentAppService = expenseInstallmentAppService;
 
     [HttpGet("{id:Guid}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var expenseInstallment = await _expenseInstallmentAppService.Get(id);
+        ExpenseInstallmentViewModel expenseInstallment = await _expenseInstallmentAppService.Get(id);
 
-        return OkFind(expenseInstallment);
+        return NotFoundIfNull(expenseInstallment);
     }
 
     [HttpGet("date/{year:int}/{month:int}/{day:int}")]
     public IActionResult GetByDate(int year, int month, int day)
     {
-        var expenseInstallments = _expenseInstallmentAppService.GetByDate(year, month, day);  
+        IEnumerable<ExpenseInstallmentViewModel> expenseInstallments = _expenseInstallmentAppService.GetByDate(year, month, day);
         return Ok(expenseInstallments);
     }
 

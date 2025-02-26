@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Application.ViewModel.Account;
 
-namespace Application.ViewModel.Account
+public class LoginResponseViewModel
 {
-    public class LoginResponseViewModel
-    {
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public string Password { get; set; }
+    public string Password { get; set; }
 
-        public string Token { get; set; }
-    }
+    public string Token { get; set; }
 }

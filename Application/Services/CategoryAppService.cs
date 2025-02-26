@@ -79,9 +79,16 @@ public class CategoryAppService : ICategoryAppService
             ?? throw new InvalidOperationException("Category not found.");
 
         if (category.UserId is null &&
-            _userContext.Role != UserTypeEnum.Admin.ToString().ToLower() &&
+            _userContext.Role.Equals(nameof(UserTypeEnum.Admin), StringComparison.OrdinalIgnoreCase) &&
             _userContext.UserId != category.UserId)
             throw new InvalidOperationException("It's not possible edit this Category.");
+    }
+
+    public async Task<CategoriesSummaryViewModel> Summary(DateTime start, DateTime end)
+    {
+        var summaryCategoriesView = await _categoryRepository.Summary(start, end, _userContext.UserId);
+
+        return _mapper.Map<CategoriesSummaryViewModel>(summaryCategoriesView);   
     }
 
     protected virtual void Dispose(bool disposing)
@@ -96,14 +103,5 @@ public class CategoryAppService : ICategoryAppService
     {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
-    }
-
-    public CategoriesSummaryViewModel Summary(DateTime start, DateTime end)
-    {
-
-        var summaryCategoriesView = _categoryRepository.Summary(start, end, _userContext.UserId);
-
-        return _mapper.Map<CategoriesSummaryViewModel>(summaryCategoriesView);
-        
     }
 }

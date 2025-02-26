@@ -1,9 +1,8 @@
 ﻿using Infrastructure.CrossCutting.Identity;
 
-namespace WebAPI.Configuration
+namespace WebAPI.Configuration;
+
+public class AppSettings
 {
-    public class AppSettings
-    {
-        public JwtSettings jwtSettings { get; set; }
-    }
+    public JwtSettings jwtSettings { get; set; }
 }

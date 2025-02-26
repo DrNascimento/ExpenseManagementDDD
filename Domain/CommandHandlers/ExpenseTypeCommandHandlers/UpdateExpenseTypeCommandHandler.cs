@@ -1,4 +1,5 @@
 ﻿using Domain.Commands.ExpenseTypeCommands;
+using Domain.Exceptions;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using MediatR;
@@ -20,7 +21,7 @@ namespace Domain.CommandHandlers.ExpenseTypeCommandHandlers
         public async Task<Unit> Handle(UpdateExpenseTypeCommand request, CancellationToken cancellationToken)
         {
             var expenseType = await _expenseTypeRepository.GetById(request.Id)
-                ?? throw new InvalidOperationException("expense Type not found.");
+                ?? throw new ResourceNotFoundException("expense Type not found.");
 
             expenseType.Name = request.Name;
             expenseType.IsFixed = request.IsFixed;

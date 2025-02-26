@@ -8,21 +8,14 @@ using MediatR;
 
 namespace Application.Services;
 
-public class UserAppService : IUserAppService
+public class UserAppService(IUserRepository userRepository,
+    IMapper mapper,
+    IMediator mediator) : IUserAppService
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
-    private readonly IMediator _mediator;
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly IMediator _mediator = mediator;
     private bool disposedValue;
-
-    public UserAppService(IUserRepository userRepository,
-        IMapper mapper,
-        IMediator mediator)
-    {
-        _userRepository = userRepository;
-        _mapper = mapper;
-        _mediator = mediator;
-    }
 
     public async Task<UserViewModel> GetById(Guid id)
     {

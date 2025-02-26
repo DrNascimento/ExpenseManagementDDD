@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Application.ViewModel.Category;
+﻿namespace Application.ViewModel.Category;
 
 public class CategoriesSummaryViewModel
 {

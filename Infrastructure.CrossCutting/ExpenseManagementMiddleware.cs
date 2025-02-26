@@ -2,17 +2,14 @@
 using FluentValidation;
 using System.Text.Json;
 using Infrastructure.CrossCutting.Models;
+using Domain.Exceptions;
+using Application.Exceptions;
 
 namespace Infrastructure.CrossCutting;
 
-public class ExpenseManagementMiddleware
+public class ExpenseManagementMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public ExpenseManagementMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -34,11 +31,16 @@ public class ExpenseManagementMiddleware
                             .Select(e => new ErrorMessageResponse(e.ErrorMessage));
 
                     break;
-                case InvalidOperationException invalidOperationException:
+                case ExpenseManagementBaseException expenseManagementBaseException:
 
-                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    context.Response.StatusCode = expenseManagementBaseException.StatusCode;
 
-                    result = new ErrorResponse(invalidOperationException.Message);
+                    result = new ErrorResponse(expenseManagementBaseException.Message);
+                    break;
+                case ApplicationBaseException applicationBaseException:
+                    context.Response.StatusCode = applicationBaseException.StatusCode;
+
+                    result = new ErrorResponse(applicationBaseException.Message);
                     break;
                 default:
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;

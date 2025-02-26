@@ -1,16 +1,17 @@
 ﻿using Domain.Enums;
 using MediatR;
 
-namespace Domain.Commands.UserCommands
+namespace Domain.Commands.UserCommands;
+
+public class CreateUserCommand : UserCommand, IRequest<Guid>
 {
-    public class CreateUserCommand : UserCommand, IRequest<Guid>
+    public string ConfirmPassword { get; set; }
+    public CreateUserCommand(string name, string email, string password, string confirmPassword, UserTypeEnum userTypeEnum)
     {
-        public CreateUserCommand(string name, string email, string password, UserTypeEnum userTypeEnum)
-        {
-            Name = name;
-            Password = password;
-            Email = email;
-            UserTypeEnum = userTypeEnum;
-        }
+        Name = name;
+        Email = email;
+        Password = password;
+        ConfirmPassword = confirmPassword;
+        UserTypeEnum = userTypeEnum;
     }
 }
