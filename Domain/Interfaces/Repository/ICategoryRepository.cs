@@ -9,6 +9,6 @@ namespace Domain.Interfaces.Repository
 
         IEnumerable<Category> GetUsersCategories(Guid userId);
 
-        SummaryCategoriesView Summary(DateTime start, DateTime end, Guid userId);
+        Task<SummaryCategoriesView> Summary(DateTime start, DateTime end, Guid userId);
     }
 }

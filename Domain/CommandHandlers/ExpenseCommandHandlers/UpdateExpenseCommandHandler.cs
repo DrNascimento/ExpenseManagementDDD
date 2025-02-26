@@ -1,4 +1,5 @@
 ﻿using Domain.Commands.ExpenseCommands;
+using Domain.Exceptions;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using MediatR;
@@ -24,7 +25,7 @@ namespace Domain.CommandHandlers.ExpenseCommandHandlers
         public async Task<Unit> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
         {
             var expense = await _expenseRepository.GetById(request.Id) ??
-                throw new InvalidOperationException("Expense not found");
+                throw new ResourceNotFoundException("Expense not found");
 
             expense.Name = request.Name;
             expense.CategoryId = request.CategoryId;

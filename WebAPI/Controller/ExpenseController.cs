@@ -9,14 +9,9 @@ namespace WebAPI.Controller;
 [Authorize]
 [ApiController]
 [Route("api/expenses")]
-public class ExpenseController : ApiController
+public class ExpenseController(IExpenseAppService expenseAppService) : ApiController
 {
-    private readonly IExpenseAppService _expenseAppService;
-
-    public ExpenseController(IExpenseAppService expenseAppService) 
-    {
-        _expenseAppService = expenseAppService;
-    }
+    private readonly IExpenseAppService _expenseAppService = expenseAppService;
 
     [HttpPost]
     public async Task<IActionResult> Post(CreateExpenseViewModel createExpenseViewModel)
@@ -29,14 +24,16 @@ public class ExpenseController : ApiController
     }
 
     [HttpGet("{id:Guid}")]
-    public IActionResult Get(Guid id)
+    [ProducesResponseType(typeof(ExpenseViewModel), 200)]
+    public async Task<IActionResult> Get(Guid id)
     {
-        var expenseViewModel = _expenseAppService.Get(id);
+        var expenseViewModel = await _expenseAppService.Get(id);
 
-        return OkFind(expenseViewModel);
+        return NotFoundIfNull(expenseViewModel);
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<ExpenseViewModel>), 200)]
     public IActionResult GetAll()
     {
         var expenseViewModels = _expenseAppService.GetAll();

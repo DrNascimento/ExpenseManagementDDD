@@ -8,30 +8,20 @@ using MediatR;
 
 namespace Application.Services;
 
-public class ExpenseAppService : IExpenseAppService
+public class ExpenseAppService(IExpenseRepository expenseRepository,
+    IMediator mediator,
+    IMapper mapper,
+    IUserContext userContext) : IExpenseAppService
 {
     private bool disposedValue;
-    private readonly IExpenseRepository _expenseRepository;
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
-    private readonly IUserContext _userContext;
+    private readonly IExpenseRepository _expenseRepository = expenseRepository;
+    private readonly IMediator _mediator = mediator;
+    private readonly IMapper _mapper = mapper;
+    private readonly IUserContext _userContext = userContext;
 
-    public ExpenseAppService(IExpenseRepository expenseRepository,
-        IMediator mediator,
-        IMapper mapper,
-        IUserContext userContext)
+    public async Task<ExpenseViewModel> Get(Guid id)
     {
-        _expenseRepository = expenseRepository;
-        _mediator = mediator;
-        _mapper = mapper;
-        _userContext = userContext;
-    }
-
-    public ExpenseViewModel Get(Guid id)
-    {
-        var expense = _expenseRepository
-            .GetExpenses(_userContext.UserId)
-            .FirstOrDefault(e => e.Id == id);
+        var expense = await _expenseRepository.GetById(id);
 
         return _mapper.Map<ExpenseViewModel>(expense);
     }
@@ -44,14 +34,7 @@ public class ExpenseAppService : IExpenseAppService
 
     public IEnumerable<ExpenseViewModel> GetByDate(int year, int month, int day)
     {
-        var expenses = _expenseRepository.GetExpenses();
-
-        expenses.Where(e =>
-            e.ExpenseInstallments
-                .Any(ei => ei.DueDate.Year == year
-                    && (month < 1 || ei.DueDate.Month == month)
-                    && (day < 1 || ei.DueDate.Day == day)
-                    ));
+        var expenses = _expenseRepository.GetByDate(year, month, day);
 
         return _mapper.Map<IEnumerable<ExpenseViewModel>>(expenses);
     }

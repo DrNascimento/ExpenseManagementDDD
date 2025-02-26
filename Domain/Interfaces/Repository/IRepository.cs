@@ -10,6 +10,8 @@ namespace Domain.Interfaces.Repository
     {
         void Add(TEntity entity);
 
+        Task Add(List<TEntity> entities);
+
         void Update(TEntity entity);
 
         void Delete(TEntity entity);

@@ -8,23 +8,15 @@ using MediatR;
 
 namespace Application.Services;
 
-public class ExpenseInstallmentAppService : IExpenseInstallmentAppService
+public class ExpenseInstallmentAppService(IUserContext userContext,
+    IMapper mapper,
+    IExpenseInstallmentRepository expenseInstallmentRepository,
+    IMediator mediator) : IExpenseInstallmentAppService
 {
-    private readonly IUserContext _userContext;
-    private readonly IMapper _mapper;
-    private readonly IExpenseInstallmentRepository _expenseInstallmentRepository;
-    private readonly IMediator _mediator;
-
-    public ExpenseInstallmentAppService(IUserContext userContext, 
-        IMapper mapper,
-        IExpenseInstallmentRepository expenseInstallmentRepository,
-        IMediator mediator)
-    {
-        _userContext = userContext;
-        _mapper = mapper;
-        _expenseInstallmentRepository = expenseInstallmentRepository;
-        _mediator = mediator;
-    }
+    private readonly IUserContext _userContext = userContext;
+    private readonly IMapper _mapper = mapper;
+    private readonly IExpenseInstallmentRepository _expenseInstallmentRepository = expenseInstallmentRepository;
+    private readonly IMediator _mediator = mediator;
 
     public async Task<ExpenseInstallmentViewModel> Get(Guid id)
     {

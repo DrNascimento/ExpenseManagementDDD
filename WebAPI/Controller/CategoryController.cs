@@ -9,14 +9,9 @@ namespace WebAPI.Controller;
 [Authorize]
 [ApiController]
 [Route("api/categories")]
-public class CategoryController : ApiController
+public class CategoryController(ICategoryAppService categoryAppService) : ApiController
 {
-    private readonly ICategoryAppService _categoryAppService;
-
-    public CategoryController(ICategoryAppService categoryAppService) 
-    {
-        _categoryAppService = categoryAppService;
-    }
+    private readonly ICategoryAppService _categoryAppService = categoryAppService;
 
     [HttpGet("{id:Guid}", Name = "Get")]
     [ProducesResponseType(typeof(CreateCategoryViewModel), 200)]
@@ -24,7 +19,7 @@ public class CategoryController : ApiController
     {
         var category = await _categoryAppService.Get(id);
 
-        return OkFind(category);
+        return NotFoundIfNull(category);
     }
 
     [HttpGet]
@@ -84,7 +79,7 @@ public class CategoryController : ApiController
     [ProducesResponseType(typeof(CategoriesSummaryViewModel), 200)]
     public async Task<IActionResult> Summary([FromQuery] DateTime start, [FromQuery] DateTime end)
     {
-        CategoriesSummaryViewModel categories = _categoryAppService.Summary(start, end);
+        CategoriesSummaryViewModel categories = await _categoryAppService.Summary(start, end);
 
         return Ok(categories);
     }

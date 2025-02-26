@@ -1,4 +1,5 @@
 ﻿using Domain.Commands.ExpenseInstallmentCommands;
+using Domain.Exceptions;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using MediatR;
@@ -21,7 +22,7 @@ namespace Domain.CommandHandlers.ExpenseInstallmentCommandHandlers
         public async Task<Unit> Handle(UpdateExpenseInstallmentCommand request, CancellationToken cancellationToken)
         {
             var installment = await _expenseInstallmentRepository.GetById(request.Id) 
-                ?? throw new InvalidOperationException("Installment not found");
+                ?? throw new ResourceNotFoundException("Installment not found");
 
             installment.DueDate = request.DueDate;
             installment.Amount = request.Amount;
@@ -37,7 +38,7 @@ namespace Domain.CommandHandlers.ExpenseInstallmentCommandHandlers
         public async Task<Unit> Handle(TogglePaidExpenseInstallmentCommand request, CancellationToken cancellationToken)
         {
             var installment = await _expenseInstallmentRepository.GetById(request.Id)
-                ?? throw new InvalidOperationException("Installment not found");
+                ?? throw new ResourceNotFoundException("Installment not found");
 
             installment.IsPaid = !installment.IsPaid;
 

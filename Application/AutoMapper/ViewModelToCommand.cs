@@ -12,37 +12,36 @@ using Domain.Commands.ExpenseTypeCommands;
 using Domain.Commands.UserCommands;
 using Domain.Enums;
 
-namespace Application.AutoMapper
+namespace Application.AutoMapper;
+
+public class ViewModelToCommand : Profile
 {
-    public class ViewModelToCommand : Profile
+    public ViewModelToCommand() 
     {
-        public ViewModelToCommand() 
-        {
-            CreateMap<CreateNewAccountViewModel, CreateUserCommand>()
-                .ConstructUsing(c => new CreateUserCommand(c.Name, c.Email, c.Password, (UserTypeEnum)c.UserTypeEnum));
+        CreateMap<CreateNewAccountViewModel, CreateUserCommand>()
+            .ConstructUsing(c => new CreateUserCommand(c.Name, c.Email, c.Password, c.ConfirmPassword, (UserTypeEnum)c.UserTypeEnum));
 
-            CreateMap<UpdateUserViewModel, UpdateUserCommand>()
-                .ConstructUsing(u => new UpdateUserCommand(u.Id, u.Name, u.Email, (UserTypeEnum)u.UserTypeEnum));
+        CreateMap<UpdateUserViewModel, UpdateUserCommand>()
+            .ConstructUsing(u => new UpdateUserCommand(u.Id, u.Name, u.Email, (UserTypeEnum)u.UserTypeEnum));
 
-            CreateMap<ExpenseTypeViewModel, CreateExpenseTypeCommand>()
-                .ConstructUsing(e => new CreateExpenseTypeCommand(e.Name, e.IsFixed));
+        CreateMap<ExpenseTypeViewModel, CreateExpenseTypeCommand>()
+            .ConstructUsing(e => new CreateExpenseTypeCommand(e.Name, e.IsFixed));
 
-            CreateMap<CreateCategoryViewModel, CreateCategoryCommand>()
-                .ConstructUsing(c => new CreateCategoryCommand(c.Name, c.UserId));
+        CreateMap<CreateCategoryViewModel, CreateCategoryCommand>()
+            .ConstructUsing(c => new CreateCategoryCommand(c.Name, c.UserId));
 
-            CreateMap<UpdateCategoryViewModel, UpdateCategoryCommand>()
-                .ConstructUsing(c => new UpdateCategoryCommand(c.Id, c.Name));
+        CreateMap<UpdateCategoryViewModel, UpdateCategoryCommand>()
+            .ConstructUsing(c => new UpdateCategoryCommand(c.Id, c.Name));
 
-            CreateMap<CreateExpenseViewModel, CreateExpenseCommand>()
-                .ConstructUsing(e => new CreateExpenseCommand(e.UserId, e.Name, e.ExpenseTypeId, e.CategoryId,
-                    e.Installments, e.ExpenseInstallmentAmount, e.ExpenseInstallmentDueDate));
+        CreateMap<CreateExpenseViewModel, CreateExpenseCommand>()
+            .ConstructUsing(e => new CreateExpenseCommand(e.UserId, e.Name, e.ExpenseTypeId, e.CategoryId,
+                e.Installments, e.ExpenseInstallmentAmount, e.ExpenseInstallmentDueDate));
 
-            CreateMap<UpdateExpenseViewModel, UpdateExpenseCommand>()
-                .ConstructUsing(e => new UpdateExpenseCommand(e.Id, e.Name, e.CategoryId));
+        CreateMap<UpdateExpenseViewModel, UpdateExpenseCommand>()
+            .ConstructUsing(e => new UpdateExpenseCommand(e.Id, e.Name, e.CategoryId));
 
-            CreateMap<UpdateExpenseInstallmentViewModel, UpdateExpenseInstallmentCommand>()
-                .ConstructUsing(e => new UpdateExpenseInstallmentCommand(e.Id, e.Amount, e.DueDate, e.IsPaid, e.UserId));
+        CreateMap<UpdateExpenseInstallmentViewModel, UpdateExpenseInstallmentCommand>()
+            .ConstructUsing(e => new UpdateExpenseInstallmentCommand(e.Id, e.Amount, e.DueDate, e.IsPaid, e.UserId));
 
-        }
     }
 }

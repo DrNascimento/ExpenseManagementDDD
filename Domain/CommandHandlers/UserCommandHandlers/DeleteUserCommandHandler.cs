@@ -1,4 +1,5 @@
 ﻿using Domain.Commands.UserCommands;
+using Domain.Exceptions;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using MediatR;
@@ -22,7 +23,7 @@ public class DeleteUserCommandHandler : UnitOfWorkCommandHandler, IRequestHandle
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetById(request.Id) 
-            ?? throw new InvalidOperationException("user not found");
+            ?? throw new ResourceNotFoundException("User not found");
 
         _userRepository.Delete(user);
         await _uow.CommitAsync();

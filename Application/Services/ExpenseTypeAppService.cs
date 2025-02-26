@@ -7,21 +7,14 @@ using MediatR;
 
 namespace Application.Services;
 
-public class ExpenseTypeAppService : IExpenseTypeAppService
+public class ExpenseTypeAppService(IMapper mapper,
+    IMediator mediator,
+    IExpenseTypeRepository expenseTypeRepository) : IExpenseTypeAppService
 {
-    private readonly IMapper _mapper;
-    private readonly IMediator _mediator;
-    private readonly IExpenseTypeRepository _expenseTypeRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly IMediator _mediator = mediator;
+    private readonly IExpenseTypeRepository _expenseTypeRepository = expenseTypeRepository;
     private bool disposedValue;
-
-    public ExpenseTypeAppService(IMapper mapper,
-        IMediator mediator,
-        IExpenseTypeRepository expenseTypeRepository)
-    {
-        _mapper = mapper;
-        _mediator = mediator;
-        _expenseTypeRepository = expenseTypeRepository;
-    }
 
     public async Task<ExpenseTypeViewModel> GetById(Guid id)
     {

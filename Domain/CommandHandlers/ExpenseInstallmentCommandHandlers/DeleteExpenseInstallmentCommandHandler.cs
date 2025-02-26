@@ -1,4 +1,5 @@
 ﻿using Domain.Commands.ExpenseInstallmentCommands;
+using Domain.Exceptions;
 using Domain.Interfaces.Repository;
 using Domain.Interfaces.UnitOfWork;
 using MediatR;
@@ -23,7 +24,7 @@ namespace Domain.CommandHandlers.ExpenseInstallmentCommandHandlers
         public async Task<Unit> Handle(DeleteExpenseInstallmentCommand request, CancellationToken cancellationToken)
         {
             var installment = await _expenseInstallmentRepository.GetById(request.Id)
-                ?? throw new InvalidOperationException("Installment not found");
+                ?? throw new ResourceNotFoundException("Installment not found");
 
             _expenseInstallmentRepository.Delete(installment);
 

@@ -1,24 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace WebAPI.Helper
+namespace WebAPI.Helper;
+
+public class ApiController : ControllerBase
 {
-    public class ApiController : ControllerBase
-    {
-        public ApiController() 
-        { 
+    public ApiController() 
+    { }
 
-        }
-
-        /// <summary>
-        /// Returns Ok when <paramref name="result"/> is not null, otherwise returns NotFound
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        protected IActionResult OkFind(object result)
-        {
-            return result is null ? NotFound() : Ok(result);    
-        }
-
-    }
+    /// <summary>
+    /// Returns 200 status when <paramref name="result"/> is not null, otherwise returns 404 status.
+    /// </summary>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    protected IActionResult NotFoundIfNull(object result) => result is null ? NotFound() : Ok(result);
 }

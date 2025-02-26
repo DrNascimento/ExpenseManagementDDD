@@ -2,14 +2,9 @@
 
 namespace Domain.CommandHandlers;
 
-public abstract class UnitOfWorkCommandHandler
+public abstract class UnitOfWorkCommandHandler(IUnitOfWork unitOfWork)
 {
-    protected IUnitOfWork _uow;
-
-    public UnitOfWorkCommandHandler(IUnitOfWork unitOfWork)
-    {
-        _uow = unitOfWork;
-    }
+    protected IUnitOfWork _uow = unitOfWork;
 
     protected async Task CommitAsync()
     {

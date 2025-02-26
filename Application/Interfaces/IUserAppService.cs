@@ -1,15 +1,14 @@
 ﻿using Application.ViewModel;
 using Application.ViewModel.User;
 
-namespace Application.Interfaces
+namespace Application.Interfaces;
+
+public interface IUserAppService : IDisposable
 {
-    public interface IUserAppService : IDisposable
-    {
 
-        Task<UserViewModel> GetById(Guid id);
+    Task<UserViewModel> GetById(Guid id);
 
-        IEnumerable<UserViewModel> GetAll();
+    IEnumerable<UserViewModel> GetAll();
 
-        Task Update(Guid Id, UpdateUserViewModel updateUserViewModel);
-    }
+    Task Update(Guid Id, UpdateUserViewModel updateUserViewModel);
 }

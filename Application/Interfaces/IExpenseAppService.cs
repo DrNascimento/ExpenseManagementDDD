@@ -1,22 +1,16 @@
 ﻿using Application.ViewModel.Expense;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.Interfaces
+namespace Application.Interfaces;
+
+public interface IExpenseAppService : IDisposable
 {
-    public interface IExpenseAppService : IDisposable
-    {
-        Task<Guid> Create(CreateExpenseViewModel createExpenseViewModel);
+    Task<Guid> Create(CreateExpenseViewModel createExpenseViewModel);
 
-        ExpenseViewModel Get(Guid Id);
+    Task<ExpenseViewModel> Get(Guid Id);
 
-        IEnumerable<ExpenseViewModel> GetAll();
+    IEnumerable<ExpenseViewModel> GetAll();
 
-        Task Update(Guid Id, UpdateExpenseViewModel updateExpenseViewModel);
+    Task Update(Guid Id, UpdateExpenseViewModel updateExpenseViewModel);
 
-        Task Delete(Guid Id);
-    }
+    Task Delete(Guid Id);
 }

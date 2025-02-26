@@ -8,23 +8,17 @@ namespace WebAPI.Controller;
 
 [ApiController]
 [Route("api/account")]
-public class AccountController : ApiController
+public class AccountController(IAccountAppService accountAppService) : ApiController
 {
-    private readonly IAccountAppService _accountAppService;
-
-    public AccountController(IAccountAppService accountAppService)
-    {
-        _accountAppService = accountAppService;
-    }
+    private readonly IAccountAppService _accountAppService = accountAppService;
 
     [HttpPost("sign-up")]
-
     public async Task<ActionResult> PostAsync([FromBody] CreateNewAccountViewModel newAccount)
     {
         if(!ModelState.IsValid)
             return BadRequest(ModelState);
-        
-        var id = await _accountAppService.Create(newAccount);
+
+        Guid id = await _accountAppService.Create(newAccount);
 
         return Created(string.Empty, new { id });
     }
@@ -35,7 +29,7 @@ public class AccountController : ApiController
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var token = await _accountAppService.LogIn(loginViewModel);
+        string token = await _accountAppService.LogIn(loginViewModel);
 
         return Ok(new { token });
     }
