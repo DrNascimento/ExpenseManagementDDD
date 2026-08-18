@@ -1,9 +1,8 @@
-﻿using Application.ViewModel.Account;
-using FluentValidation;
+using Application.DTO.Input.Account;
 
 namespace Application.RequestValidation.Account;
 
-public class LoginValidation : AbstractValidator<LoginViewModel>
+public class LoginValidation : AbstractValidator<LoginInput>
 {
     public LoginValidation()
     {
