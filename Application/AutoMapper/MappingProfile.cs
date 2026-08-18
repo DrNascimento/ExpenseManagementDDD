@@ -1,37 +1,31 @@
-﻿using Application.ViewModel;
-using Application.ViewModel.Account;
-using Application.ViewModel.Category;
-using Application.ViewModel.Expense;
-using Application.ViewModel.ExpenseInstallment;
-using Application.ViewModel.ExpenseType;
-using AutoMapper;
-using Domain.Entities;
-using Domain.View;
+using Application.DTO.Output.Category;
+using Application.DTO.Output.Expense;
+using Application.DTO.Output.ExpenseInstallment;
+using Application.DTO.Output.ExpenseType;
+using Application.DTO.Output.User;
 
 namespace Application.AutoMapper;
 
 public class MappingProfile : Profile
 {
-    public MappingProfile() 
+    public MappingProfile()
     {
-        CreateMap<User, LoginResponseViewModel>();
+        CreateMap<User, UserOutput>();
 
-        CreateMap<User, UserViewModel>();
+        CreateMap<ExpenseType, ExpenseTypeOutput>();
 
-        CreateMap<ExpenseType, ExpenseTypeViewModel>();
+        CreateMap<Expense, ExpenseOutput>();
 
-        CreateMap<Expense, ExpenseViewModel>();
+        CreateMap<Expense, ExpenseToInstallmentOutput>();
 
-        CreateMap<Expense, ExpenseToInstallment>();
+        CreateMap<ExpenseInstallment, InstallmentOutput>();
 
-        CreateMap<ExpenseInstallment, InstallmentViewModel>();
+        CreateMap<ExpenseInstallment, ExpenseInstallmentOutput>();
 
-        CreateMap<ExpenseInstallment, ExpenseInstallmentViewModel>();            
+        CreateMap<Category, CategoryOutput>();
 
-        CreateMap<Category, CategoryViewModel>();
+        CreateMap<SummaryCategoriesView, CategoriesSummaryOutput>();
 
-        CreateMap<SummaryCategoriesView, CategoriesSummaryViewModel>();
-
-        CreateMap<SummaryCategoryView, CategorySummaryViewModel>();
+        CreateMap<SummaryCategoryView, CategorySummaryOutput>();
     }
 }

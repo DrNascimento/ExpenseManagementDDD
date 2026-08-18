@@ -2,7 +2,6 @@ using Application.AutoMapper;
 using Infrastructure.CrossCutting;
 using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using WebAPI.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,10 +41,6 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDependencyInjectionConfiguration();
 
-builder.Services.AddMediatR(cfg => 
-    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()).RegisterBehaviorsValidators());
-
-
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddIdentitySetup(builder.Configuration);
@@ -71,9 +66,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("CorsPolicy");
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
 app.Run();

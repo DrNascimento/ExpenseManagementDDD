@@ -1,6 +1,6 @@
-﻿using Application.Interfaces;
-using Application.ViewModel;
-using Application.ViewModel.User;
+using Application.DTO.Input.User;
+using Application.DTO.Output.User;
+using Application.Handlers.User;
 using Infrastructure.CrossCutting.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,45 +11,47 @@ namespace WebAPI.Controller;
 [Authorize]
 [ApiController]
 [Route("api/users")]
-public class UserController(IUserAppService userAppService, IUserContext userContext) : ApiController
+public class UserController(IUserContext userContext) : ApiController
 {
-    private readonly IUserAppService _userAppService = userAppService;
-    private readonly IUserContext _userContext = userContext;
-
     [Authorize(Roles = "admin")]
     [HttpGet("{id:Guid}")]
-    public async Task<ActionResult> GetById(Guid id)
+    public async Task<ActionResult> GetById(
+        Guid id,
+        [FromServices] GetUserByIdHandler getUserByIdHandler)
     {
-        var registeredUser = await _userAppService.GetById(id);
+        var registeredUser = await getUserByIdHandler.ExecuteAsync(id);
 
         return Ok(registeredUser);
     }
 
     [Authorize(Roles = "admin")]
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<UserViewModel>), 200)]
-    public ActionResult GetAll()
+    [ProducesResponseType(typeof(IEnumerable<UserOutput>), 200)]
+    public ActionResult GetAll([FromServices] GetAllUsersHandler getAllUsersHandler)
     {
-        IEnumerable<UserViewModel> users = _userAppService.GetAll();
+        IEnumerable<UserOutput> users = getAllUsersHandler.Execute();
 
         return Ok(users);
     }
 
     [HttpGet("profile")]
-    [ProducesResponseType(typeof(UserViewModel), 200)]
-    public async Task<ActionResult> GetProfile()
+    [ProducesResponseType(typeof(UserOutput), 200)]
+    public async Task<ActionResult> GetProfile([FromServices] GetUserByIdHandler getUserByIdHandler)
     {
-        UserViewModel user = await _userAppService.GetById(_userContext.UserId);
+        UserOutput user = await getUserByIdHandler.ExecuteAsync(userContext.UserId);
         return Ok(user);
     }
 
     [HttpPut("{id:Guid}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateUserViewModel updateUserViewModel)
+    public async Task<IActionResult> Put(
+        Guid id,
+        [FromBody] UpdateUserInput updateUserInput,
+        [FromServices] UpdateUserHandler updateUserHandler)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        await _userAppService.Update(id, updateUserViewModel);
+        await updateUserHandler.ExecuteAsync(id, updateUserInput);
 
         return Ok();
     }

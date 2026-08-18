@@ -1,5 +1,7 @@
-﻿using Application.Interfaces;
-using Application.ViewModel.ExpenseInstallment;
+using Application.DTO.Input.ExpenseInstallment;
+using Application.DTO.Output.ExpenseInstallment;
+using Application.Handlers.ExpenseInstallment;
+using Infrastructure.CrossCutting.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Helper;
@@ -9,44 +11,53 @@ namespace WebAPI.Controller;
 [Authorize]
 [ApiController]
 [Route("api/expenses-installments")]
-public class ExpenseInstallmentController(IExpenseInstallmentAppService expenseInstallmentAppService) : ApiController
+public class ExpenseInstallmentController(IUserContext userContext) : ApiController
 {
-    private readonly IExpenseInstallmentAppService _expenseInstallmentAppService = expenseInstallmentAppService;
-
     [HttpGet("{id:Guid}")]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<IActionResult> Get(
+        Guid id,
+        [FromServices] GetExpenseInstallmentHandler getExpenseInstallmentHandler)
     {
-        ExpenseInstallmentViewModel expenseInstallment = await _expenseInstallmentAppService.Get(id);
+        ExpenseInstallmentOutput expenseInstallment = await getExpenseInstallmentHandler.ExecuteAsync(id, userContext.UserId);
 
         return NotFoundIfNull(expenseInstallment);
     }
 
     [HttpGet("date/{year:int}/{month:int}/{day:int}")]
-    public IActionResult GetByDate(int year, int month, int day)
+    public IActionResult GetByDate(
+        int year,
+        int month,
+        int day,
+        [FromServices] GetExpenseInstallmentsByDateHandler getExpenseInstallmentsByDateHandler)
     {
-        IEnumerable<ExpenseInstallmentViewModel> expenseInstallments = _expenseInstallmentAppService.GetByDate(year, month, day);
+        IEnumerable<ExpenseInstallmentOutput> expenseInstallments = getExpenseInstallmentsByDateHandler.Execute(year, month, day, userContext.UserId);
         return Ok(expenseInstallments);
     }
 
     [HttpPut("{id:Guid}")]
     public async Task<IActionResult> Put(Guid id,
-        UpdateExpenseInstallmentViewModel updateExpenseInstallmentViewModel)
+        UpdateExpenseInstallmentInput input,
+        [FromServices] UpdateExpenseInstallmentHandler updateExpenseInstallmentHandler)
     {
-        await _expenseInstallmentAppService.Update(id, updateExpenseInstallmentViewModel);
+        await updateExpenseInstallmentHandler.ExecuteAsync(id, input, userContext.UserId);
         return Ok();
     }
 
     [HttpPut("paid/{id:Guid}")]
-    public async Task<IActionResult> Put(Guid id)
+    public async Task<IActionResult> Put(
+        Guid id,
+        [FromServices] TogglePaidExpenseInstallmentHandler togglePaidExpenseInstallmentHandler)
     {
-        await _expenseInstallmentAppService.UpdatePaid(id);
+        await togglePaidExpenseInstallmentHandler.ExecuteAsync(id, userContext.UserId);
         return Ok();
     }
 
     [HttpDelete("{id:Guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(
+        Guid id,
+        [FromServices] DeleteExpenseInstallmentHandler deleteExpenseInstallmentHandler)
     {
-        await _expenseInstallmentAppService.Delete(id);
+        await deleteExpenseInstallmentHandler.ExecuteAsync(id, userContext.UserId);
         return NoContent();
     }
 }
