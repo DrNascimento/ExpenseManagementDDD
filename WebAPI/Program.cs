@@ -1,4 +1,3 @@
-using Application.AutoMapper;
 using Infrastructure.CrossCutting;
 using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -40,8 +39,6 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddDependencyInjectionConfiguration();
-
-builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddIdentitySetup(builder.Configuration);
 builder.Services.AddSwaggerGen();

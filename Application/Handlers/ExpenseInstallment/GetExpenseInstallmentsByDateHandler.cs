@@ -2,7 +2,7 @@ using Application.DTO.Output.ExpenseInstallment;
 
 namespace Application.Handlers.ExpenseInstallment;
 
-public class GetExpenseInstallmentsByDateHandler(IExpenseInstallmentRepository expenseInstallmentRepository, IMapper mapper)
+public class GetExpenseInstallmentsByDateHandler(IExpenseInstallmentRepository expenseInstallmentRepository)
 {
     public IEnumerable<ExpenseInstallmentOutput> Execute(int year, int month, int day, Guid userId)
     {
@@ -13,6 +13,6 @@ public class GetExpenseInstallmentsByDateHandler(IExpenseInstallmentRepository e
                 && (day == 0 || e.DueDate.Day == day))
             .OrderBy(e => e.InstallmentNumber);
 
-        return mapper.Map<IEnumerable<ExpenseInstallmentOutput>>(installments);
+        return installments.ToOutput();
     }
 }
