@@ -365,5 +365,10 @@ FodyWeavers.xsd
 # macOS
 .DS_Store
 
+# Local SQLite runtime data
+Infrastructure.SQLiteDatabase/*.db
+Infrastructure.SQLiteDatabase/*.db-shm
+Infrastructure.SQLiteDatabase/*.db-wal
+
 # Copilot specs
 .copilot/
