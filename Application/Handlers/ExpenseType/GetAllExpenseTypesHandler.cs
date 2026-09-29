@@ -2,11 +2,11 @@ using Application.DTO.Output.ExpenseType;
 
 namespace Application.Handlers.ExpenseType;
 
-public class GetAllExpenseTypesHandler(IExpenseTypeRepository expenseTypeRepository, IMapper mapper)
+public class GetAllExpenseTypesHandler(IExpenseTypeRepository expenseTypeRepository)
 {
     public IEnumerable<ExpenseTypeOutput> Execute()
     {
         var expenseTypes = expenseTypeRepository.GetAll();
-        return mapper.Map<IEnumerable<ExpenseTypeOutput>>(expenseTypes);
+        return expenseTypes.ToOutput();
     }
 }
