@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations.SQLite
 {
     [DbContext(typeof(ExpenseManagementContext))]
-    [Migration("20261016023021_AddRefreshTokens")]
+    [Migration("20261016024448_AddRefreshTokens")]
     partial class AddRefreshTokens
     {
         /// <inheritdoc />
@@ -171,6 +171,7 @@ namespace Infrastructure.Data.Migrations.SQLite
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("RevokedAt")
+                        .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TokenHash")

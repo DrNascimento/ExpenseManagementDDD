@@ -13,4 +13,9 @@ public class ExpenseManagementBaseException : Exception
 
     public ExpenseManagementBaseException(string message) : base(message)
     { }
+
+    public ExpenseManagementBaseException(string message, HttpStatusCode httpStatusCode, Exception innerException) : base(message, innerException)
+    {
+        StatusCode = (int)httpStatusCode;
+    }
 }

@@ -168,6 +168,7 @@ namespace Infrastructure.Data.Migrations.SQLite
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("RevokedAt")
+                        .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TokenHash")

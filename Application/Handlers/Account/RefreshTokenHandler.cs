@@ -39,7 +39,16 @@ public class RefreshTokenHandler(
 
         var refreshToken = tokenAppService.GenerateRefreshToken();
         user.RotateRefreshToken(current, refreshToken.TokenHash, now, refreshToken.ExpiresAt);
-        await unitOfWork.CommitAsync();
+
+        try
+        {
+            await unitOfWork.CommitAsync();
+        }
+        catch (ConcurrencyConflictException)
+        {
+            // Another request rotated this token first.
+            throw new InvalidRefreshTokenException();
+        }
 
         return tokenAppService.ToOutput(user, refreshToken);
     }
