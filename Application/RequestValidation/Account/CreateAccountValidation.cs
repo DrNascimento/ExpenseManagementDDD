@@ -24,9 +24,5 @@ public class CreateAccountValidation : AbstractValidator<CreateAccountInput>
             .NotEmpty()
             .Equal(x => x.Password)
             .WithMessage("Password confirmation does not match.");
-
-        RuleFor(x => x.UserTypeEnum)
-            .Must(value => Enum.IsDefined(typeof(UserTypeEnum), value))
-            .WithMessage("Invalid user type.");
     }
 }

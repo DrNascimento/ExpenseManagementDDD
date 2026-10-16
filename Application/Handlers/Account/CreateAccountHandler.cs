@@ -1,27 +1,26 @@
 using Application.DTO.Input.Account;
+using Application.DTO.Output.Account;
+using Application.Interfaces;
+using Application.Services;
 
 namespace Application.Handlers.Account;
 
 public class CreateAccountHandler(
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
+    ITokenAppService tokenAppService,
     IValidator<CreateAccountInput> validator)
 {
-    public async Task<Guid> ExecuteAsync(CreateAccountInput input)
+    public async Task<AuthTokensOutput> ExecuteAsync(CreateAccountInput input)
     {
         await validator.ValidateAndThrowAsync(input);
 
-        var user = new Domain.Entities.User
-        {
-            Name = input.Name,
-            Email = input.Email,
-            Password = BCryptHash.HashPassword(input.Password),
-            UserTypeEnum = (UserTypeEnum)input.UserTypeEnum
-        };
+        var user = Domain.Entities.User.CreateCommon(input.Name, input.Email, BCryptHash.HashPassword(input.Password));
+        var tokens = tokenAppService.IssueTokens(user);
 
         userRepository.Add(user);
         await unitOfWork.CommitAsync();
 
-        return user.Id;
+        return tokens;
     }
 }

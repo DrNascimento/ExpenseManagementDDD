@@ -1,9 +1,18 @@
-﻿namespace Application.Interfaces
+namespace Application.Interfaces
 {
-    public interface ITokenAppService : IDisposable
+    public interface ITokenAppService
     {
-        string GenerateToken(User user);
+        int AccessTokenExpiresInSeconds { get; }
 
-        bool ValidateToken(string token);
+        string GenerateAccessToken(User user);
+
+        GeneratedRefreshToken GenerateRefreshToken();
+
+        string HashRefreshToken(string refreshToken);
     }
+
+    /// <summary>
+    /// A new refresh token: <see cref="Token"/> goes to the client, only <see cref="TokenHash"/> is persisted.
+    /// </summary>
+    public record GeneratedRefreshToken(string Token, string TokenHash, DateTime CreatedAt, DateTime ExpiresAt);
 }

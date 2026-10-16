@@ -42,10 +42,12 @@ public static class ExpenseManagementDI
         services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
 
         // Services still required
+        services.AddSingleton(TimeProvider.System);
         services.AddScoped<ITokenAppService, TokenAppService>();
 
         // Validators
         services.AddScoped<IValidator<CreateAccountInput>, CreateAccountValidation>();
+        services.AddScoped<IValidator<RefreshTokenInput>, RefreshTokenValidation>();
         services.AddScoped<IValidator<CreateCategoryInput>, CreateCategoryValidation>();
         services.AddScoped<IValidator<UpdateCategoryInput>, UpdateCategoryValidation>();
         services.AddScoped<IValidator<CreateExpenseInput>, CreateExpenseValidation>();
@@ -57,6 +59,8 @@ public static class ExpenseManagementDI
         // Account handlers
         services.AddScoped<CreateAccountHandler>();
         services.AddScoped<LoginAccountHandler>();
+        services.AddScoped<RefreshTokenHandler>();
+        services.AddScoped<LogoutHandler>();
 
         // User handlers
         services.AddScoped<GetUserByIdHandler>();
