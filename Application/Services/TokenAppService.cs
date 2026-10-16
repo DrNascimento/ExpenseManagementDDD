@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using Application.DTO.Output.Account;
 using Application.Interfaces;
 
 namespace Application.Services
@@ -9,12 +10,40 @@ namespace Application.Services
 
         private readonly JwtSettings _jwtSettings = options.Value;
 
-        public int AccessTokenExpiresInSeconds => _jwtSettings.AccessTokenExpirationInMinutes * 60;
+        public AuthTokensOutput IssueTokens(User user)
+        {
+            var now = timeProvider.GetUtcNow().UtcDateTime;
+            var refreshToken = GenerateRefreshToken();
 
-        public string GenerateAccessToken(User user)
+            user.AddRefreshToken(HashRefreshToken(refreshToken), now, RefreshTokenExpiresAt(now));
+
+            return CreateOutput(user, refreshToken, now);
+        }
+
+        public AuthTokensOutput RotateTokens(User user, RefreshToken current)
+        {
+            var now = timeProvider.GetUtcNow().UtcDateTime;
+            var refreshToken = GenerateRefreshToken();
+
+            user.RotateRefreshToken(current, HashRefreshToken(refreshToken), now, RefreshTokenExpiresAt(now));
+
+            return CreateOutput(user, refreshToken, now);
+        }
+
+        public string HashRefreshToken(string refreshToken) =>
+            Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
+
+        private AuthTokensOutput CreateOutput(User user, string refreshToken, DateTime now) =>
+            new(GenerateAccessToken(user, now), refreshToken, _jwtSettings.AccessTokenExpirationInMinutes * 60);
+
+        private DateTime RefreshTokenExpiresAt(DateTime now) => now.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
+
+        private static string GenerateRefreshToken() =>
+            Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(RefreshTokenSizeInBytes));
+
+        private string GenerateAccessToken(User user, DateTime now)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var now = timeProvider.GetUtcNow().UtcDateTime;
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -35,20 +64,5 @@ namespace Application.Services
             
             return tokenHandler.WriteToken(token);
         }
-
-        public GeneratedRefreshToken GenerateRefreshToken()
-        {
-            var now = timeProvider.GetUtcNow().UtcDateTime;
-            var token = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(RefreshTokenSizeInBytes));
-
-            return new GeneratedRefreshToken(
-                token,
-                HashRefreshToken(token),
-                now,
-                now.AddDays(_jwtSettings.RefreshTokenExpirationInDays));
-        }
-
-        public string HashRefreshToken(string refreshToken) =>
-            Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
     }
 }

@@ -2,7 +2,6 @@ using Application.DTO.Input.Account;
 using Application.DTO.Output.Account;
 using Application.Exceptions;
 using Application.Interfaces;
-using Application.Services;
 
 namespace Application.Handlers.Account;
 
@@ -37,8 +36,7 @@ public class RefreshTokenHandler(
         if (current.IsExpired(now))
             throw new InvalidRefreshTokenException();
 
-        var refreshToken = tokenAppService.GenerateRefreshToken();
-        user.RotateRefreshToken(current, refreshToken.TokenHash, now, refreshToken.ExpiresAt);
+        var tokens = tokenAppService.RotateTokens(user, current);
 
         try
         {
@@ -50,6 +48,6 @@ public class RefreshTokenHandler(
             throw new InvalidRefreshTokenException();
         }
 
-        return tokenAppService.ToOutput(user, refreshToken);
+        return tokens;
     }
 }

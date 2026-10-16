@@ -3,7 +3,6 @@ using Application.DTO.Output.Account;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.RequestValidation.Account;
-using Application.Services;
 
 namespace Application.Handlers.Account;
 
