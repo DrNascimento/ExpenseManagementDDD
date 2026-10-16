@@ -1,18 +1,19 @@
+using Application.DTO.Output.Account;
+
 namespace Application.Interfaces
 {
     public interface ITokenAppService
     {
-        int AccessTokenExpiresInSeconds { get; }
+        /// <summary>
+        /// Issues an access token and a new refresh token, registering the refresh token on <paramref name="user"/>.
+        /// </summary>
+        AuthTokensOutput IssueTokens(User user);
 
-        string GenerateAccessToken(User user);
-
-        GeneratedRefreshToken GenerateRefreshToken();
+        /// <summary>
+        /// Revokes <paramref name="current"/> and issues an access token with its replacement refresh token.
+        /// </summary>
+        AuthTokensOutput RotateTokens(User user, RefreshToken current);
 
         string HashRefreshToken(string refreshToken);
     }
-
-    /// <summary>
-    /// A new refresh token: <see cref="Token"/> goes to the client, only <see cref="TokenHash"/> is persisted.
-    /// </summary>
-    public record GeneratedRefreshToken(string Token, string TokenHash, DateTime CreatedAt, DateTime ExpiresAt);
 }

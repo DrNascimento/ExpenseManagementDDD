@@ -69,7 +69,6 @@ namespace Infrastructure.Data.Context
                 token.Property(t => t.TokenHash).IsRequired().HasMaxLength(64);
                 token.HasIndex(t => t.TokenHash).IsUnique();
                 token.HasIndex(t => t.UserId);
-                token.Ignore(t => t.IsRevoked);
                 // Two requests rotating the same token: only the first revoke may win, so reuse detection cannot be bypassed.
                 token.Property(t => t.RevokedAt).IsConcurrencyToken();
             });

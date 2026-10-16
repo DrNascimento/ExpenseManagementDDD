@@ -1,7 +1,6 @@
 using Application.DTO.Input.Account;
 using Application.DTO.Output.Account;
 using Application.Interfaces;
-using Application.Services;
 
 namespace Application.Handlers.Account;
 

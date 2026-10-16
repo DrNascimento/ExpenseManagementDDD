@@ -32,19 +32,18 @@ public class TokenAppServiceTests
     }
 
     [Fact]
-    public void AC8_GenerateAccessToken_ExpiresAfterConfiguredMinutes()
+    public void AC8_IssueTokens_AccessTokenExpiresAfterConfiguredMinutes()
     {
-        var service = NewService();
-        var user = User.CreateCommon("Ana", "ana@mail.com", "hash");
+        var tokens = NewService().IssueTokens(NewUser());
 
-        var jwt = new JwtSecurityTokenHandler().ReadJwtToken(service.GenerateAccessToken(user));
+        var jwt = new JwtSecurityTokenHandler().ReadJwtToken(tokens.AccessToken);
 
         Assert.Equal(Now.UtcDateTime.AddMinutes(20), jwt.ValidTo);
-        Assert.Equal(20 * 60, service.AccessTokenExpiresInSeconds);
+        Assert.Equal(20 * 60, tokens.ExpiresIn);
     }
 
     [Fact]
-    public void AC8_GenerateAccessToken_UsesConfiguredLifetime()
+    public void AC8_IssueTokens_UsesConfiguredAccessTokenLifetime()
     {
         var service = NewService(new JwtSettings
         {
@@ -54,47 +53,67 @@ public class TokenAppServiceTests
             AccessTokenExpirationInMinutes = 5
         });
 
-        var jwt = new JwtSecurityTokenHandler().ReadJwtToken(
-            service.GenerateAccessToken(User.CreateCommon("Ana", "ana@mail.com", "hash")));
+        var tokens = service.IssueTokens(NewUser());
 
-        Assert.Equal(Now.UtcDateTime.AddMinutes(5), jwt.ValidTo);
-        Assert.Equal(300, service.AccessTokenExpiresInSeconds);
+        Assert.Equal(Now.UtcDateTime.AddMinutes(5), new JwtSecurityTokenHandler().ReadJwtToken(tokens.AccessToken).ValidTo);
+        Assert.Equal(300, tokens.ExpiresIn);
     }
 
     [Fact]
-    public void AC8_GenerateRefreshToken_ExpiresAfterConfiguredDays()
+    public void AC8_IssueTokens_RefreshTokenExpiresAfterConfiguredDays()
     {
-        var refreshToken = NewService().GenerateRefreshToken();
+        var user = NewUser();
 
-        Assert.Equal(Now.UtcDateTime, refreshToken.CreatedAt);
-        Assert.Equal(Now.UtcDateTime.AddDays(30), refreshToken.ExpiresAt);
+        NewService().IssueTokens(user);
+
+        var stored = Assert.Single(user.RefreshTokens);
+        Assert.Equal(Now.UtcDateTime, stored.CreatedAt);
+        Assert.Equal(Now.UtcDateTime.AddDays(30), stored.ExpiresAt);
     }
 
     [Fact]
-    public void AC10_GenerateRefreshToken_Is64RandomBytesBase64UrlEncoded()
-    {
-        var service = NewService();
-
-        var first = service.GenerateRefreshToken();
-        var second = service.GenerateRefreshToken();
-
-        Assert.Equal(64, Base64UrlEncoder.DecodeBytes(first.Token).Length);
-        Assert.DoesNotContain('+', first.Token);
-        Assert.DoesNotContain('/', first.Token);
-        Assert.DoesNotContain('=', first.Token);
-        Assert.NotEqual(first.Token, second.Token);
-    }
-
-    [Fact]
-    public void AC10_HashRefreshToken_IsSha256OfToken()
+    public void AC10_IssueTokens_RefreshTokenIs64RandomBytesBase64UrlEncoded()
     {
         var service = NewService();
-        var refreshToken = service.GenerateRefreshToken();
 
-        var expected = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken.Token)));
+        var first = service.IssueTokens(NewUser()).RefreshToken;
+        var second = service.IssueTokens(NewUser()).RefreshToken;
 
-        Assert.Equal(expected, refreshToken.TokenHash);
-        Assert.Equal(expected, service.HashRefreshToken(refreshToken.Token));
-        Assert.NotEqual(refreshToken.Token, refreshToken.TokenHash);
+        Assert.Equal(64, Base64UrlEncoder.DecodeBytes(first).Length);
+        Assert.DoesNotContain('+', first);
+        Assert.DoesNotContain('/', first);
+        Assert.DoesNotContain('=', first);
+        Assert.NotEqual(first, second);
     }
+
+    [Fact]
+    public void AC10_IssueTokens_StoresOnlySha256HashOnUser()
+    {
+        var service = NewService();
+        var user = NewUser();
+
+        var refreshToken = service.IssueTokens(user).RefreshToken;
+
+        var expected = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
+        Assert.Equal(expected, Assert.Single(user.RefreshTokens).TokenHash);
+        Assert.Equal(expected, service.HashRefreshToken(refreshToken));
+    }
+
+    [Fact]
+    public void AC11_RotateTokens_RevokesCurrentAndRegistersReplacement()
+    {
+        var service = NewService();
+        var user = NewUser();
+        var oldRefreshToken = service.IssueTokens(user).RefreshToken;
+        var current = user.FindRefreshToken(service.HashRefreshToken(oldRefreshToken))!;
+
+        var tokens = service.RotateTokens(user, current);
+
+        var replacement = user.FindRefreshToken(service.HashRefreshToken(tokens.RefreshToken))!;
+        Assert.Equal(replacement.Id, current.ReplacedByTokenId);
+        Assert.Equal(Now.UtcDateTime, current.RevokedAt);
+        Assert.Equal(20 * 60, tokens.ExpiresIn);
+    }
+
+    private static User NewUser() => User.CreateCommon("Ana", "ana@mail.com", "hash");
 }
