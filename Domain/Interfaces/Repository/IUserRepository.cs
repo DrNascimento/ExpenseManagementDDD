@@ -11,4 +11,10 @@ public interface IUserRepository : IRepository<User>
     Task<User> GetByEmail(string email);
 
     bool HasUserById(Guid id);
+
+    /// <summary>
+    /// Returns the owner of the refresh token with <paramref name="tokenHash"/>, loading that token
+    /// and every non-revoked token of the user, or null when no token matches.
+    /// </summary>
+    Task<User?> GetByRefreshTokenHash(string tokenHash);
 }

@@ -1,15 +1,20 @@
-﻿using Application.Interfaces;
+using System.Security.Cryptography;
+using Application.Interfaces;
 
 namespace Application.Services
 {
-    public class TokenAppService(IOptions<JwtSettings> options) : ITokenAppService
+    public class TokenAppService(IOptions<JwtSettings> options, TimeProvider timeProvider) : ITokenAppService
     {
-        private readonly JwtSettings _jwtSettings = options.Value;
-        private bool disposedValue;
+        private const int RefreshTokenSizeInBytes = 64;
 
-        public string GenerateToken(User user)
+        private readonly JwtSettings _jwtSettings = options.Value;
+
+        public int AccessTokenExpiresInSeconds => _jwtSettings.AccessTokenExpirationInMinutes * 60;
+
+        public string GenerateAccessToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
+            var now = timeProvider.GetUtcNow().UtcDateTime;
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -21,7 +26,9 @@ namespace Application.Services
                 }),
                 Issuer = _jwtSettings.Issuer,
                 Audience = _jwtSettings.Audience,
-                Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes),
+                IssuedAt = now,
+                NotBefore = now,
+                Expires = now.AddMinutes(_jwtSettings.AccessTokenExpirationInMinutes),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey)), SecurityAlgorithms.HmacSha256)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -29,49 +36,19 @@ namespace Application.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public bool ValidateToken(string token)
+        public GeneratedRefreshToken GenerateRefreshToken()
         {
-            try
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var validationParameters = GetValidationParameters();
-                
-                tokenHandler.ValidateToken(token, validationParameters, out _);
+            var now = timeProvider.GetUtcNow().UtcDateTime;
+            var token = Base64UrlEncoder.Encode(RandomNumberGenerator.GetBytes(RefreshTokenSizeInBytes));
 
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return new GeneratedRefreshToken(
+                token,
+                HashRefreshToken(token),
+                now,
+                now.AddDays(_jwtSettings.RefreshTokenExpirationInDays));
         }
 
-        private TokenValidationParameters GetValidationParameters()
-        {
-            var key = Convert.FromBase64String(_jwtSettings.SecretKey);
-            var validationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key)
-            };
-
-            return validationParameters;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
+        public string HashRefreshToken(string refreshToken) =>
+            Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
     }
 }

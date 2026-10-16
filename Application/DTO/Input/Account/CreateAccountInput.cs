@@ -13,7 +13,4 @@ public record CreateAccountInput
 
     [JsonPropertyName("email")]
     public string Email { get; init; } = string.Empty;
-
-    [JsonPropertyName("type_user")]
-    public int UserTypeEnum { get; init; }
 }

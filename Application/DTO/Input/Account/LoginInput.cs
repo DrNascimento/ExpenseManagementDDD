@@ -7,7 +7,4 @@ public record LoginInput
 
     [JsonPropertyName("password")]
     public string Password { get; init; } = string.Empty;
-
-    [JsonPropertyName("is_remember_me")]
-    public bool IsRememberMe { get; init; }
 }

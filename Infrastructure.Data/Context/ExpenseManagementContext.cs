@@ -28,6 +28,8 @@ namespace Infrastructure.Data.Context
 
         public virtual DbSet<ExpenseInstallment> ExpenseInstallments { get; set; }
 
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,6 +50,27 @@ namespace Infrastructure.Data.Context
                     v => v.ToString(), 
                     v => (UserTypeEnum)Enum.Parse(typeof(UserTypeEnum), v) 
                 );
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.RefreshTokens)
+                .WithOne()
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .Navigation(u => u.RefreshTokens)
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+            modelBuilder.Entity<RefreshToken>(token =>
+            {
+                token.ToTable("RefreshTokens");
+                token.HasKey(t => t.Id);
+                token.Property(t => t.Id).ValueGeneratedNever();
+                token.Property(t => t.TokenHash).IsRequired().HasMaxLength(64);
+                token.HasIndex(t => t.TokenHash).IsUnique();
+                token.HasIndex(t => t.UserId);
+                token.Ignore(t => t.IsRevoked);
+            });
         }
     }
 }

@@ -40,4 +40,11 @@ public class UserRepository : Repository<User>, IUserRepository
     {
         return DbSet.Any(u => u.Id == id);
     }
+
+    public async Task<User?> GetByRefreshTokenHash(string tokenHash)
+    {
+        return await DbSet
+            .Include(u => u.RefreshTokens.Where(t => t.RevokedAt == null || t.TokenHash == tokenHash))
+            .FirstOrDefaultAsync(u => !u.IsDeleted && u.RefreshTokens.Any(t => t.TokenHash == tokenHash));
+    }
 }

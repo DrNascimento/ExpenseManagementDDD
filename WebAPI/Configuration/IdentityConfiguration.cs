@@ -40,6 +40,8 @@ public static class IdentityConfiguration
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
+                // Access tokens are short-lived; expire them exactly on time instead of the default 5 minute grace period.
+                ClockSkew = TimeSpan.Zero,
                 RoleClaimType = ClaimTypes.Role
             };
         });

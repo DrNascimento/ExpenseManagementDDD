@@ -1,4 +1,4 @@
-using Infrastructure.CrossCutting;
+﻿using Infrastructure.CrossCutting;
 using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Configuration;
@@ -66,3 +66,6 @@ app.UseCors("CorsPolicy");
 app.MapControllers();
 
 app.Run();
+
+// Exposes the entry point to WebApplicationFactory in integration tests.
+public partial class Program;

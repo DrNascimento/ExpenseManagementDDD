@@ -1,13 +1,15 @@
 using Application.DTO.Input.Account;
+using Application.DTO.Output.Account;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.RequestValidation.Account;
+using Application.Services;
 
 namespace Application.Handlers.Account;
 
-public class LoginAccountHandler(IUserRepository userRepository, ITokenAppService tokenAppService)
+public class LoginAccountHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ITokenAppService tokenAppService)
 {
-    public async Task<string> ExecuteAsync(LoginInput input)
+    public async Task<AuthTokensOutput> ExecuteAsync(LoginInput input)
     {
         new LoginValidation().ValidateAndThrow(input);
 
@@ -16,6 +18,9 @@ public class LoginAccountHandler(IUserRepository userRepository, ITokenAppServic
         if (user is null || !BCryptHash.VerifyPassword(input.Password, user.Password))
             throw new LoginFailedException();
 
-        return tokenAppService.GenerateToken(user);
+        var tokens = tokenAppService.IssueTokens(user);
+        await unitOfWork.CommitAsync();
+
+        return tokens;
     }
 }
